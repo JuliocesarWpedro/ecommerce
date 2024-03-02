@@ -60,7 +60,7 @@ const Header = () => {
   return (
     <TagHeader>
       <Logo href="/" className={sairaStencil.className}>
-        capputeeno
+        E-commerce
       </Logo>
       <Container>
         <SearchInput />
