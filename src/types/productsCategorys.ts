@@ -1,3 +1,3 @@
 export default interface FilterItemProps {
-  selectedCategory: boolean;
+  $selectedcategory: number;
 }
