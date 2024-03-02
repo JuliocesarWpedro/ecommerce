@@ -13,39 +13,42 @@ const FilterItem = styled.li<FilterItemProps>`
   align-items: center;
   gap: 40px;
   font-size: 16px;
-  font-weight: ${(props) => (props.selectedCategory ? '600' : '400')};
+  font-weight: ${(props) => (props.$selectedcategory ? '600' : '400')};
   line-height: 22px;
   text-transform: uppercase;
   letter-spacing: 0em;
   cursor: pointer;
   text-align: center;
   color: ${(props) =>
-    props.selectedCategory
+    props.$selectedcategory
       ? 'var(--text-dark-2: #41414D)'
       : 'var(--text-dark)'};
   border-bottom: ${(props) =>
-    props.selectedCategory ? '4px solid var(--orange-low)' : 'none'};
+    props.$selectedcategory ? '4px solid var(--orange-low)' : 'none'};
 `;
 
 const FilterList = () => {
-  const [types, setTypes] = React.useState(FilterType.ALLPRODUCTS);
+  const [typesProducts, setTypesProducts] = React.useState(
+    FilterType.ALLPRODUCTS,
+  );
+
   return (
     <FilterListTag>
       <FilterItem
-        onClick={() => setTypes(FilterType.ALLPRODUCTS)}
-        selectedCategory={types === FilterType.ALLPRODUCTS ? true : false}
+        onClick={() => setTypesProducts(FilterType.ALLPRODUCTS)}
+        $selectedcategory={typesProducts === FilterType.ALLPRODUCTS ? 1 : 0}
       >
         Todos os Produtos
       </FilterItem>
       <FilterItem
-        onClick={() => setTypes(FilterType.MENSCLOTHING)}
-        selectedCategory={types === FilterType.MENSCLOTHING ? true : false}
+        onClick={() => setTypesProducts(FilterType.MENSCLOTHING)}
+        $selectedcategory={typesProducts === FilterType.MENSCLOTHING ? 1 : 0}
       >
         Blusas Masculinas
       </FilterItem>
       <FilterItem
-        onClick={() => setTypes(FilterType.WOMENSCLOTHING)}
-        selectedCategory={types === FilterType.WOMENSCLOTHING ? true : false}
+        onClick={() => setTypesProducts(FilterType.WOMENSCLOTHING)}
+        $selectedcategory={typesProducts === FilterType.WOMENSCLOTHING ? 1 : 0}
       >
         Blusas femininas
       </FilterItem>
