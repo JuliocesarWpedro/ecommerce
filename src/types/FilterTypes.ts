@@ -5,3 +5,10 @@ export enum FilterType {
   'ELETRONICS',
   'WOMENSCLOTHING',
 }
+
+export default interface OrderProducts {
+  news: string;
+  HigherLower: string;
+  LowerHigher: string;
+  bestSellers: string;
+}
