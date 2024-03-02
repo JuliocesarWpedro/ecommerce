@@ -47,6 +47,10 @@ const Logo = styled.a`
   line-height: 60px;
   letter-spacing: 0em;
   color: var(--logo-color);
+
+  @media (max-width: 330px) {
+    font-size: 37px;
+  }
 `;
 
 const Container = styled.div`
