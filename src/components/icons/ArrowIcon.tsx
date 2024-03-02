@@ -1,6 +1,7 @@
-export function ArrowIcon() {
+export function ArrowIcon({ rotationDeg = '0' }: { rotationDeg: string }) {
   return (
     <svg
+      style={{ transform: `rotate(${rotationDeg})` }}
       width="10"
       height="6"
       viewBox="0 0 10 6"
