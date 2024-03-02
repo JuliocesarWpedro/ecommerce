@@ -6,6 +6,10 @@ import styled from 'styled-components';
 const FilterListTag = styled.ul`
   display: flex;
   gap: 40px;
+
+  @media (max-width: 420px) {
+    gap: 20px;
+  }
 `;
 
 const FilterItem = styled.li<FilterItemProps>`
@@ -25,6 +29,9 @@ const FilterItem = styled.li<FilterItemProps>`
       : 'var(--text-dark)'};
   border-bottom: ${(props) =>
     props.$selectedcategory ? '4px solid var(--orange-low)' : 'none'};
+  @media (max-width: 420px) {
+    font-size: 14px;
+  }
 `;
 
 const FilterList = () => {
