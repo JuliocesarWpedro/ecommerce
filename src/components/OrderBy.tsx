@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowIcon } from './icons/ArrowIcon';
 import styled from 'styled-components';
-import OrderProducts from '@/types/FilterTypes';
+import OrderProducts from '@/types/filterTypes';
 
 const Container = styled.div`
   position: relative;
@@ -59,20 +59,60 @@ const ORDERBYOPTIONS: OrderProducts = {
 
 const OrderBy = () => {
   const [openModal, setOpenModal] = React.useState<boolean>(false);
+  const dropDownModal = React.useRef<HTMLUListElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const orderByTagRef = React.useRef<HTMLDivElement>(null);
+  const spanRef = React.useRef<HTMLSpanElement>(null);
   const [orderProducts, setOrderProducts] =
     React.useState<OrderProducts | null>(null);
+
+  const handleClickOutsideLanguageDropdown = React.useCallback(
+    (e: Event) => {
+      const target = e.target as HTMLElement;
+
+      if (
+        openModal &&
+        dropDownModal.current &&
+        target !== orderByTagRef.current &&
+        !orderByTagRef.current?.contains(target) &&
+        target !== spanRef.current &&
+        !spanRef.current?.contains(target) &&
+        !dropDownModal.current.contains(target) &&
+        !containerRef.current?.contains(target)
+      ) {
+        setOpenModal(false);
+      }
+    },
+    [openModal],
+  );
+
+  React.useEffect(() => {
+    const handleClick = (e: Event) => {
+      handleClickOutsideLanguageDropdown(e);
+    };
+
+    window.addEventListener('click', handleClick);
+
+    return () => {
+      window.removeEventListener('click', handleClick);
+    };
+  }, [handleClickOutsideLanguageDropdown]);
+
   return (
-    <Container>
-      <OrderByTag onClick={() => setOpenModal((value) => !value)}>
-        <span>Organizar por</span> <ArrowIcon rotationDeg="0" />
+    <Container ref={containerRef}>
+      <OrderByTag
+        ref={orderByTagRef}
+        onClick={() => setOpenModal((value) => !value)}
+      >
+        <span ref={spanRef}>Organizar por</span> <ArrowIcon rotationDeg="0" />
       </OrderByTag>
       {openModal && (
-        <OrderByOpen>
+        <OrderByOpen ref={dropDownModal}>
           {Object.entries(ORDERBYOPTIONS).map(([key, value], index) => (
             <OrderByOpenItem
               key={index}
               onClick={() => {
-                setOpenModal((value) => !value);
+                setOpenModal((valueModal) => !valueModal);
                 setOrderProducts(value);
               }}
             >
