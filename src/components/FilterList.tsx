@@ -1,4 +1,4 @@
-import { FilterType } from '@/types/FilterTypes';
+import { FilterType } from '@/types/filterTypes';
 import FilterItemProps from '@/types/productsCategorys';
 import React from 'react';
 import styled from 'styled-components';

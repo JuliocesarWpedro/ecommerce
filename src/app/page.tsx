@@ -1,12 +1,14 @@
 'use client';
 import FilterList from '@/components/FilterList';
 import Pagination from '@/components/Pagination';
+import ProductsList from '@/components/ProductsList';
 import styled from 'styled-components';
 
 const MainContainer = styled.main`
   display: flex;
+  flex-direction: column;
+  height: max-content;
   width: 100%;
-  height: 100vh;
   background-color: var(--bg-secondary);
   padding: 0 160px;
   margin: 0 auto;
@@ -46,6 +48,7 @@ export default function Home() {
         <FilterList />
         <Pagination />
       </ContainerFilterAndPagination>
+      <ProductsList></ProductsList>
     </MainContainer>
   );
 }
