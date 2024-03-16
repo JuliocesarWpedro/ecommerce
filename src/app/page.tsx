@@ -1,6 +1,7 @@
 'use client';
 import FilterList from '@/components/FilterList';
 import Pagination from '@/components/Pagination';
+import PaginationListComponent from '@/components/PaginationListComponent';
 import ProductsList from '@/components/ProductsList';
 import styled from 'styled-components';
 
@@ -41,6 +42,13 @@ const ContainerFilterAndPagination = styled.div`
   }
 `;
 
+const ContainerPagination = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 74px 0px 60px 0px;
+`;
+
 export default function Home() {
   return (
     <MainContainer>
@@ -49,6 +57,9 @@ export default function Home() {
         <Pagination />
       </ContainerFilterAndPagination>
       <ProductsList></ProductsList>
+      <ContainerPagination>
+        <PaginationListComponent />
+      </ContainerPagination>
     </MainContainer>
   );
 }
