@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['fakestoreapi.com'],
+    domains: ['i.imgur.com'],
   },
   compiler: {
     styledComponents: true,

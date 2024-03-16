@@ -19,8 +19,10 @@ const ContainerProducts = styled.div`
 `;
 
 const ProductsList = () => {
+  const [currentPage, setCurrentPage] = React.useState<number>(1);
+  const [perPage, setPerPage] = React.useState<number>(10);
   const { data } = useFetch<ProductsFetchResponse>(
-    'https://fakestoreapi.com/products',
+    'https://api-storage-products.vercel.app/products',
   );
   console.log(data);
   return (
