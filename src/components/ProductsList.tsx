@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import Product from './Product';
 
 const ContainerProducts = styled.div`
+  min-height: 100vh;
   padding-top: 32px;
   display: flex;
   flex-wrap: wrap;
@@ -24,7 +25,6 @@ const ProductsList = () => {
   const { data } = useFetch<ProductsFetchResponse>(
     'https://api-storage-products.vercel.app/products',
   );
-  console.log(data);
   return (
     <ContainerProducts>
       {data &&
