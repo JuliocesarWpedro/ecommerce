@@ -16,14 +16,15 @@ const formattedValue = (value: string) => {
 const ProductItem = styled.div`
   display: flex;
   flex-direction: column;
-  width: 256px;
+  width: 195px;
   height: 378px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 `;
 
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 256px;
+  width: 195px;
   background-color: #fff;
   height: 78px;
   justify-content: space-between;
@@ -34,7 +35,6 @@ const TextContainer = styled.div`
 const LineSeparator = styled.div`
   display: block;
   content: '';
-  width: 228px;
   height: 1px;
   background-color: var(--shapes);
 `;
@@ -62,10 +62,10 @@ const PriceProduct = styled.span`
 
 const LinkImg = styled.a`
   height: 300px;
-  border-radius: 8px 0 0 8px;
+  border-radius: 8px 8px 0px 0px;
 
   & > * {
-    border-radius: 8px 0 0 8px;
+    border-radius: 8px 8px 0px 0px;
   }
 `;
 
@@ -73,7 +73,7 @@ const Product = ({ product }: { product: ProductType }) => {
   return (
     <ProductItem>
       <LinkImg href="/">
-        <Image src={product.image} alt="" width={256} height={300} />
+        <Image src={product.image} alt="" width={195} height={300} />
       </LinkImg>
       <TextContainer>
         <TitleProduct>{product.title}</TitleProduct>
