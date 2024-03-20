@@ -76,9 +76,9 @@ const Product = ({ product }: { product: ProductType }) => {
         <Image src={product.image} alt="" width={195} height={300} />
       </LinkImg>
       <TextContainer>
-        <TitleProduct>{product.title}</TitleProduct>
+        <TitleProduct>{product.name}</TitleProduct>
         <LineSeparator />
-        <PriceProduct>{formattedValue(product.price)}</PriceProduct>
+        <PriceProduct>{formattedValue(String(product.price))}</PriceProduct>
       </TextContainer>
     </ProductItem>
   );

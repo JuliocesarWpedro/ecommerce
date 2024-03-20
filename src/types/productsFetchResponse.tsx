@@ -1,9 +1,13 @@
 export interface ProductType {
   id: string;
-  title: string;
-  price: string;
-  category: string;
+  category: 'womansClothing' | 'mensClothing';
+  name: string;
+  price: number;
+  parcelamento: number[];
+  color: string;
   image: string;
+  size: string[];
+  date: string;
 }
 
 export interface ProductsFetchResponse {
