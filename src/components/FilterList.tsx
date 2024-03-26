@@ -32,6 +32,10 @@ const FilterItem = styled.li<FilterItemProps>`
   @media (max-width: 420px) {
     font-size: 14px;
   }
+  &:hover {
+    font-weight: 600;
+    color: var(--text-dark-2);
+  }
 `;
 
 const FilterList = () => {
