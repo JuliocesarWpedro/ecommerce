@@ -3,6 +3,7 @@ import FilterList from '@/components/FilterList';
 import Pagination from '@/components/Pagination';
 import PaginationListComponent from '@/components/PaginationListComponent';
 import ProductsList from '@/components/ProductsList';
+import { CartContextProvider } from '@/components/context/ContextPagination';
 import styled from 'styled-components';
 
 const MainContainer = styled.main`
@@ -51,15 +52,17 @@ const ContainerPagination = styled.div`
 
 export default function Home() {
   return (
-    <MainContainer>
-      <ContainerFilterAndPagination>
-        <FilterList />
-        <Pagination />
-      </ContainerFilterAndPagination>
-      <ProductsList></ProductsList>
-      <ContainerPagination>
-        <PaginationListComponent />
-      </ContainerPagination>
-    </MainContainer>
+    <CartContextProvider>
+      <MainContainer>
+        <ContainerFilterAndPagination>
+          <FilterList />
+          <Pagination />
+        </ContainerFilterAndPagination>
+        <ProductsList></ProductsList>
+        <ContainerPagination>
+          <PaginationListComponent />
+        </ContainerPagination>
+      </MainContainer>
+    </CartContextProvider>
   );
 }
