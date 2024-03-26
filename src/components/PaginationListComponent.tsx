@@ -2,10 +2,13 @@ import React from 'react';
 import { ArrowIcon } from './icons/ArrowIcon';
 import styled from 'styled-components';
 import { usePagination } from '@/hooks/usePagination';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
 
-interface PaginationSelectProps extends React.HTMLAttributes<HTMLLIElement> {
-  $selectedPage?: boolean;
-  $disabled?: boolean;
+interface PaginationSelectProps {
+  selectedPage: boolean;
+  $disabled: boolean;
+  onClick: () => void;
 }
 
 const PaginationList = styled.ul`
@@ -30,17 +33,11 @@ const PaginationSelect = styled.li<PaginationSelectProps>`
   justify-content: center;
   border-radius: 8px;
   color: ${(props) =>
-    props.$selectedPage ? 'var(--orange-low)' : 'var(--text-dark)'};
+    props.selectedPage ? 'var(--orange-low)' : 'var(--text-dark)'};
   background-color: ${(props) =>
-    props.$selectedPage ? '#fff' : 'var(--shapes)'};
-  background-color: ${(props) =>
-    props.$selectedPage
-      ? '#fff'
-      : props.$disabled
-      ? '#DCE2E63D'
-      : 'var(--shapes)'};
+    props.selectedPage ? '#fff' : 'var(--shapes)'};
   border: ${(props) =>
-    props.$selectedPage ? '1px solid var(--orange-low)' : 'none'};
+    props.selectedPage ? '1px solid var(--orange-low)' : 'none'};
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
@@ -59,7 +56,7 @@ const PaginationSelect = styled.li<PaginationSelectProps>`
 const PaginationListComponent = () => {
   const { currentPage, totalPages } = usePagination();
   const minPages = 2;
-  const maxPagesToShow = 4;
+  const slidesPerView = 4;
 
   const handlePageClick = (pageNumber: number) => {
     if (pageNumber !== currentPage) {
@@ -67,33 +64,37 @@ const PaginationListComponent = () => {
     }
   };
 
-  const handleNextPage = (increment: number) => {
+  const handleNextPage = () => {
     if (currentPage >= 1 && currentPage < totalPages) {
-      const nextPage = currentPage + increment;
+      const nextPage = currentPage + 1;
       window.history.pushState({}, '', `?_page=${nextPage}`);
     }
   };
 
-  const handlePreviousPage = (increment: number) => {
+  const handlePreviousPage = () => {
     if (currentPage > 1) {
-      const previousPage = currentPage - increment;
+      const previousPage = currentPage - 1;
       window.history.pushState({}, '', `?_page=${previousPage}`);
     }
   };
 
   const renderPaginationSelects = () => {
     const paginationSelects = [];
-    const pagesToShow = Math.min(totalPages, maxPagesToShow);
+    const startPage = Math.max(1, currentPage - Math.floor(slidesPerView / 2));
+    const endPage = Math.min(startPage + slidesPerView - 1, totalPages);
+
     if (totalPages >= minPages) {
-      for (let i = 1; i <= pagesToShow; i++) {
+      for (let i = startPage; i <= endPage; i++) {
         paginationSelects.push(
-          <PaginationSelect
-            key={i}
-            $selectedPage={i === currentPage}
-            onClick={() => handlePageClick(i)}
-          >
-            {i}
-          </PaginationSelect>,
+          <SwiperSlide key={i} onClick={() => handlePageClick(i)}>
+            <PaginationSelect
+              $disabled={false}
+              selectedPage={i === currentPage}
+              onClick={() => handlePageClick(i)}
+            >
+              {i}
+            </PaginationSelect>
+          </SwiperSlide>,
         );
       }
     }
@@ -101,25 +102,32 @@ const PaginationListComponent = () => {
   };
 
   return (
-    <PaginationList>
-      {renderPaginationSelects()}
-      {totalPages >= minPages && (
-        <>
-          <PaginationSelect
-            $disabled={currentPage <= 1}
-            onClick={() => handlePreviousPage(1)}
-          >
-            <ArrowIcon rotationDeg="90deg" />
-          </PaginationSelect>
-          <PaginationSelect
-            $disabled={currentPage >= totalPages}
-            onClick={() => handleNextPage(1)}
-          >
-            <ArrowIcon rotationDeg="-90deg" />
-          </PaginationSelect>
-        </>
-      )}
-    </PaginationList>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Swiper spaceBetween={5} slidesPerView={slidesPerView} loop={false}>
+        {renderPaginationSelects()}
+      </Swiper>
+      <PaginationSelect
+        $disabled={currentPage <= 1}
+        selectedPage={false}
+        onClick={handlePreviousPage}
+      >
+        <ArrowIcon rotationDeg="90deg" />
+      </PaginationSelect>
+      <PaginationSelect
+        $disabled={currentPage >= totalPages}
+        selectedPage={false}
+        onClick={handleNextPage}
+        style={{ marginLeft: '5px' }}
+      >
+        <ArrowIcon rotationDeg="-90deg" />
+      </PaginationSelect>
+    </div>
   );
 };
 

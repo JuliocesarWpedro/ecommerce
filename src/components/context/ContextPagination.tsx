@@ -24,7 +24,7 @@ export function CartContextProvider({
   const searchParams = useSearchParams();
   const pageSearchParam = searchParams.get('_page');
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [perPage, setPerPage] = React.useState(9);
+  const [perPage, setPerPage] = React.useState(12);
   const [totalItems, setTotalItems] = React.useState<number | null>(null);
   const [totalPages, setTotalPages] = React.useState<number>(0);
 
