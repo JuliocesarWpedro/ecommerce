@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import styled from 'styled-components';
 import Product from './Product';
+import { usePagination } from '@/hooks/usePagination';
 
 const ContainerProducts = styled.div`
   min-height: 100vh;
@@ -20,11 +21,11 @@ const ContainerProducts = styled.div`
 `;
 
 const ProductsList = () => {
-  const [currentPage, setCurrentPage] = React.useState<number>(1);
-  const [perPage, setPerPage] = React.useState<number>(10);
+  const { currentPage, perPage } = usePagination();
   const { data } = useFetch<ProductsFetchResponse>(
-    'https://api-storage-products.vercel.app/products',
+    `https://api-storage-products.vercel.app/products?_page=${currentPage}&_limit=${perPage}`,
   );
+
   return (
     <ContainerProducts>
       {data &&
