@@ -112,21 +112,25 @@ const PaginationListComponent = () => {
       <Swiper spaceBetween={5} slidesPerView={slidesPerView} loop={false}>
         {renderPaginationSelects()}
       </Swiper>
-      <PaginationSelect
-        $disabled={currentPage <= 1}
-        selectedPage={false}
-        onClick={handlePreviousPage}
-      >
-        <ArrowIcon rotationDeg="90deg" />
-      </PaginationSelect>
-      <PaginationSelect
-        $disabled={currentPage >= totalPages}
-        selectedPage={false}
-        onClick={handleNextPage}
-        style={{ marginLeft: '5px' }}
-      >
-        <ArrowIcon rotationDeg="-90deg" />
-      </PaginationSelect>
+      {totalPages >= minPages && (
+        <>
+          <PaginationSelect
+            $disabled={currentPage <= 1}
+            selectedPage={false}
+            onClick={handlePreviousPage}
+          >
+            <ArrowIcon rotationDeg="90deg" />
+          </PaginationSelect>
+          <PaginationSelect
+            $disabled={currentPage >= totalPages}
+            selectedPage={false}
+            onClick={handleNextPage}
+            style={{ marginLeft: '5px' }}
+          >
+            <ArrowIcon rotationDeg="-90deg" />
+          </PaginationSelect>
+        </>
+      )}
     </div>
   );
 };
