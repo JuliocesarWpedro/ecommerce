@@ -3,7 +3,8 @@ import FilterList from '@/components/FilterList';
 import Pagination from '@/components/Pagination';
 import PaginationListComponent from '@/components/PaginationListComponent';
 import ProductsList from '@/components/ProductsList';
-import { CartContextProvider } from '@/components/context/ContextPagination';
+import { PaginationContextProvider } from '@/context/ContextPagination';
+import { FilterContextProvider } from '@/context/ContextFilter';
 import styled from 'styled-components';
 
 const MainContainer = styled.main`
@@ -52,17 +53,19 @@ const ContainerPagination = styled.div`
 
 export default function Home() {
   return (
-    <CartContextProvider>
-      <MainContainer>
-        <ContainerFilterAndPagination>
-          <FilterList />
-          <Pagination />
-        </ContainerFilterAndPagination>
-        <ProductsList></ProductsList>
-        <ContainerPagination>
-          <PaginationListComponent />
-        </ContainerPagination>
-      </MainContainer>
-    </CartContextProvider>
+    <FilterContextProvider>
+      <PaginationContextProvider>
+        <MainContainer>
+          <ContainerFilterAndPagination>
+            <FilterList />
+            <Pagination />
+          </ContainerFilterAndPagination>
+          <ProductsList></ProductsList>
+          <ContainerPagination>
+            <PaginationListComponent />
+          </ContainerPagination>
+        </MainContainer>
+      </PaginationContextProvider>
+    </FilterContextProvider>
   );
 }
