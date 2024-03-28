@@ -11,6 +11,11 @@ export interface ProductType {
 }
 
 export interface ProductsFetchResponse {
-  length: number;
   products: ProductType[];
+}
+
+export interface QuantityFetchResponse {
+  allProducts: string;
+  mensClothing: string;
+  womansClothing: string;
 }
