@@ -1,3 +1,4 @@
+import { useFilter } from '@/hooks/useFilter';
 import { FilterType } from '@/types/filterTypes';
 import FilterItemProps from '@/types/productsCategorys';
 import React from 'react';
@@ -39,27 +40,33 @@ const FilterItem = styled.li<FilterItemProps>`
 `;
 
 const FilterList = () => {
-  const [typesProducts, setTypesProducts] = React.useState(
-    FilterType.ALLPRODUCTS,
-  );
-
+  const { typesProducts, setTypesProducts } = useFilter();
   return (
     <FilterListTag>
       <FilterItem
-        onClick={() => setTypesProducts(FilterType.ALLPRODUCTS)}
-        $selectedcategory={typesProducts === FilterType.ALLPRODUCTS ? 1 : 0}
+        onClick={() => {
+          setTypesProducts(FilterType.allProducts);
+          window.history.pushState({}, '', `?_page=1`);
+        }}
+        $selectedcategory={typesProducts === FilterType.allProducts ? 1 : 0}
       >
         Todos os Produtos
       </FilterItem>
       <FilterItem
-        onClick={() => setTypesProducts(FilterType.MENSCLOTHING)}
-        $selectedcategory={typesProducts === FilterType.MENSCLOTHING ? 1 : 0}
+        onClick={() => {
+          setTypesProducts(FilterType.mensClothing);
+          window.history.pushState({}, '', `?_page=1`);
+        }}
+        $selectedcategory={typesProducts === FilterType.mensClothing ? 1 : 0}
       >
         Blusas Masculinas
       </FilterItem>
       <FilterItem
-        onClick={() => setTypesProducts(FilterType.WOMENSCLOTHING)}
-        $selectedcategory={typesProducts === FilterType.WOMENSCLOTHING ? 1 : 0}
+        onClick={() => {
+          setTypesProducts(FilterType.womansClothing);
+          window.history.pushState({}, '', `?_page=1`);
+        }}
+        $selectedcategory={typesProducts === FilterType.womansClothing ? 1 : 0}
       >
         Blusas femininas
       </FilterItem>

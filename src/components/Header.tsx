@@ -2,7 +2,6 @@
 import { Saira_Stencil_One } from 'next/font/google';
 import SearchInput from '../components/SearchInput';
 import { styled } from 'styled-components';
-
 import CartControl from './CartControl';
 
 const TagHeader = styled.header`

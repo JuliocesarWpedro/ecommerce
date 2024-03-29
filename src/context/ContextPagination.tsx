@@ -1,22 +1,26 @@
 import useFetch from '@/hooks/useFetch';
-import { ProductsFetchResponse } from '@/types/productsFetchResponse';
+import { QuantityFetchResponse } from '@/types/productsFetchResponse';
 import React from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useFilter } from '@/hooks/useFilter';
+import { FilterType } from '@/types/filterTypes';
 
-interface CartContextProps {
+interface PaginationContextProps {
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   perPage: number;
   setPerPage: React.Dispatch<React.SetStateAction<number>>;
   totalItems: number | null;
   totalPages: number;
+  setTotalItems: React.Dispatch<React.SetStateAction<number | null>>;
+  setTotalPages: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const PaginationContext = React.createContext<
-  CartContextProps | undefined
+  PaginationContextProps | undefined
 >(undefined);
 
-export function CartContextProvider({
+export function PaginationContextProvider({
   children,
 }: {
   children: React.ReactNode;
@@ -27,16 +31,25 @@ export function CartContextProvider({
   const [perPage, setPerPage] = React.useState(12);
   const [totalItems, setTotalItems] = React.useState<number | null>(null);
   const [totalPages, setTotalPages] = React.useState<number>(0);
+  const { typesProducts } = useFilter();
 
-  const { data } = useFetch<ProductsFetchResponse>(
-    'https://api-storage-products.vercel.app/products',
+  const { data } = useFetch<QuantityFetchResponse>(
+    'https://api-storage-products.vercel.app/quantitys',
   );
 
   React.useEffect(() => {
     if (data) {
-      setTotalItems(data.length);
+      if (FilterType[typesProducts].toString() === 'allProducts') {
+        setTotalItems(Number(data.allProducts));
+      }
+      if (FilterType[typesProducts].toString() === 'mensClothing') {
+        setTotalItems(Number(data.mensClothing));
+      }
+      if (FilterType[typesProducts].toString() === 'womansClothing') {
+        setTotalItems(Number(data.womansClothing));
+      }
     }
-  }, [data]);
+  }, [data, typesProducts]);
 
   React.useEffect(() => {
     if (pageSearchParam && Number(pageSearchParam) !== 0) {
@@ -58,6 +71,8 @@ export function CartContextProvider({
         setPerPage,
         totalItems,
         totalPages,
+        setTotalItems,
+        setTotalPages,
       }}
     >
       {children}

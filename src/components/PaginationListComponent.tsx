@@ -3,10 +3,10 @@ import { ArrowIcon } from './icons/ArrowIcon';
 import styled from 'styled-components';
 import { usePagination } from '@/hooks/usePagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.css';
+
 
 interface PaginationSelectProps {
-  selectedPage: boolean;
+  $selectedPage: boolean;
   $disabled: boolean;
   onClick: () => void;
 }
@@ -33,11 +33,11 @@ const PaginationSelect = styled.li<PaginationSelectProps>`
   justify-content: center;
   border-radius: 8px;
   color: ${(props) =>
-    props.selectedPage ? 'var(--orange-low)' : 'var(--text-dark)'};
+    props.$selectedPage ? 'var(--orange-low)' : 'var(--text-dark)'};
   background-color: ${(props) =>
-    props.selectedPage ? '#fff' : 'var(--shapes)'};
+    props.$selectedPage ? '#fff' : 'var(--shapes)'};
   border: ${(props) =>
-    props.selectedPage ? '1px solid var(--orange-low)' : 'none'};
+    props.$selectedPage ? '1px solid var(--orange-low)' : 'none'};
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
@@ -89,7 +89,7 @@ const PaginationListComponent = () => {
           <SwiperSlide key={i} onClick={() => handlePageClick(i)}>
             <PaginationSelect
               $disabled={false}
-              selectedPage={i === currentPage}
+              $selectedPage={i === currentPage}
               onClick={() => handlePageClick(i)}
             >
               {i}
@@ -116,14 +116,14 @@ const PaginationListComponent = () => {
         <>
           <PaginationSelect
             $disabled={currentPage <= 1}
-            selectedPage={false}
+            $selectedPage={false}
             onClick={handlePreviousPage}
           >
             <ArrowIcon rotationDeg="90deg" />
           </PaginationSelect>
           <PaginationSelect
             $disabled={currentPage >= totalPages}
-            selectedPage={false}
+            $selectedPage={false}
             onClick={handleNextPage}
             style={{ marginLeft: '5px' }}
           >
