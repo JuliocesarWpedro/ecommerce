@@ -1,9 +1,9 @@
 export enum FilterType {
-  'ALLPRODUCTS',
-  'MENSCLOTHING',
+  'allProducts',
+  'mensClothing',
+  'womansClothing',
   'JEWELERY',
   'ELETRONICS',
-  'WOMENSCLOTHING',
 }
 
 export default interface OrderProducts {
