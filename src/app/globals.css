@@ -20,6 +20,10 @@
   z-index: 0 !important;
 }
 
+.swiper-wrapper {
+  display: flex;
+}
+
 .swiper-slide {
   width: 32px !important;
   height: 32px !important;
