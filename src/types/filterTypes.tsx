@@ -6,9 +6,16 @@ export enum FilterType {
   'ELETRONICS',
 }
 
+export enum OrderProductsEnum {
+  'news',
+  'HigherLower',
+  'LowerHigher',
+  "bestSellers"
+}
+
 export default interface OrderProducts {
   news: string;
   HigherLower: string;
   LowerHigher: string;
-  bestSellers: string;
+  bestSellers?: string;
 }
