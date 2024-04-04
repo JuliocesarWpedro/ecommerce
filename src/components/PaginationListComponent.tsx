@@ -3,7 +3,8 @@ import { ArrowIcon } from './icons/ArrowIcon';
 import styled from 'styled-components';
 import { usePagination } from '@/hooks/usePagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
-
+import { useFilter } from '@/hooks/useFilter';
+import { FilterType } from '@/types/filterTypes';
 
 interface PaginationSelectProps {
   $selectedPage: boolean;
@@ -55,26 +56,45 @@ const PaginationSelect = styled.li<PaginationSelectProps>`
 
 const PaginationListComponent = () => {
   const { currentPage, totalPages } = usePagination();
+  const { typesProducts } = useFilter();
   const minPages = 2;
   const slidesPerView = 4;
 
   const handlePageClick = (pageNumber: number) => {
     if (pageNumber !== currentPage) {
-      window.history.pushState({}, '', `?_page=${pageNumber}`);
+      window.history.pushState(
+        {},
+        '',
+        `?typeProduct=${FilterType[
+          typesProducts
+        ].toString()}&_page=${pageNumber}`,
+      );
     }
   };
 
   const handleNextPage = () => {
     if (currentPage >= 1 && currentPage < totalPages) {
       const nextPage = currentPage + 1;
-      window.history.pushState({}, '', `?_page=${nextPage}`);
+      window.history.pushState(
+        {},
+        '',
+        `?typeProduct=${FilterType[
+          typesProducts
+        ].toString()}&_page=${nextPage}`,
+      );
     }
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       const previousPage = currentPage - 1;
-      window.history.pushState({}, '', `?_page=${previousPage}`);
+      window.history.pushState(
+        {},
+        '',
+        `?typeProduct=${FilterType[
+          typesProducts
+        ].toString()}&_page=${previousPage}`,
+      );
     }
   };
 

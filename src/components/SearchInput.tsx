@@ -66,7 +66,7 @@ const SearchInput = () => {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         placeholder="Procurando por algo específico?"
-      />
+      ></TagInputSearch>
       <SearchIcon
         onClick={() => {
           handleSubmit(inputValue);

@@ -27,11 +27,12 @@ export function PaginationContextProvider({
 }) {
   const searchParams = useSearchParams();
   const pageSearchParam = searchParams.get('_page');
+  const typeProductSearchParam = searchParams.get('typeProduct');
   const [currentPage, setCurrentPage] = React.useState(1);
   const [perPage, setPerPage] = React.useState(12);
-  const [totalItems, setTotalItems] = React.useState<number | null>(null);
   const [totalPages, setTotalPages] = React.useState<number>(0);
-  const { typesProducts } = useFilter();
+  const { setTypesProducts } = useFilter();
+  const [totalItems, setTotalItems] = React.useState<number | null>(0);
 
   const { data } = useFetch<QuantityFetchResponse>(
     'https://api-storage-products.vercel.app/quantitys',
@@ -39,17 +40,23 @@ export function PaginationContextProvider({
 
   React.useEffect(() => {
     if (data) {
-      if (FilterType[typesProducts].toString() === 'allProducts') {
+      if (!typeProductSearchParam) {
         setTotalItems(Number(data.allProducts));
       }
-      if (FilterType[typesProducts].toString() === 'mensClothing') {
-        setTotalItems(Number(data.mensClothing));
+      if (typeProductSearchParam === 'allProducts') {
+        setTotalItems(Number(data.allProducts));
+        setTypesProducts(FilterType.allProducts);
       }
-      if (FilterType[typesProducts].toString() === 'womansClothing') {
+      if (typeProductSearchParam === 'mensClothing') {
+        setTotalItems(Number(data.mensClothing));
+        setTypesProducts(FilterType.mensClothing);
+      }
+      if (typeProductSearchParam === 'womansClothing') {
         setTotalItems(Number(data.womansClothing));
+        setTypesProducts(FilterType.womansClothing);
       }
     }
-  }, [data, typesProducts]);
+  }, [data, typeProductSearchParam, setTypesProducts]);
 
   React.useEffect(() => {
     if (pageSearchParam && Number(pageSearchParam) !== 0) {

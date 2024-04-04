@@ -1,7 +1,8 @@
 import React from 'react';
 import { ArrowIcon } from './icons/ArrowIcon';
 import styled from 'styled-components';
-import OrderProducts from '@/types/filterTypes';
+import OrderProducts, { OrderProductsEnum } from '@/types/filterTypes';
+import { useFilter } from '@/hooks/useFilter';
 
 const Container = styled.div`
   position: relative;
@@ -54,7 +55,6 @@ const ORDERBYOPTIONS: OrderProducts = {
   news: 'Novidades',
   HigherLower: 'Preço: Maior - Menor',
   LowerHigher: 'Preço: Menor - Maior',
-  bestSellers: 'Mais Vendidos',
 };
 
 const OrderBy = () => {
@@ -63,8 +63,7 @@ const OrderBy = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const orderByTagRef = React.useRef<HTMLDivElement>(null);
   const spanRef = React.useRef<HTMLSpanElement>(null);
-  const [orderProducts, setOrderProducts] =
-    React.useState<OrderProducts | null>(null);
+  const { setOrderProducts } = useFilter();
 
   const handleClickOutsideLanguageDropdown = React.useCallback(
     (e: Event) => {
@@ -113,7 +112,15 @@ const OrderBy = () => {
               key={index}
               onClick={() => {
                 setOpenModal((valueModal) => !valueModal);
-                setOrderProducts(value);
+                if (key === 'news') {
+                  setOrderProducts(OrderProductsEnum.news);
+                }
+                if (key === 'HigherLower') {
+                  setOrderProducts(OrderProductsEnum.HigherLower);
+                }
+                if (key === 'LowerHigher') {
+                  setOrderProducts(OrderProductsEnum.LowerHigher);
+                }
               }}
             >
               {value}
