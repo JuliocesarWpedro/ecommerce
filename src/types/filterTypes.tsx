@@ -7,10 +7,10 @@ export enum FilterType {
 }
 
 export enum OrderProductsEnum {
+  'bestSellers',
   'news',
   'HigherLower',
   'LowerHigher',
-  "bestSellers"
 }
 
 export default interface OrderProducts {

@@ -1,5 +1,5 @@
 export interface ProductType {
-  id: string;
+  id: number;
   category: 'womansClothing' | 'mensClothing';
   name: string;
   price: number;
@@ -15,7 +15,7 @@ export interface ProductsFetchResponse {
 }
 
 export interface QuantityFetchResponse {
-  allProducts: string;
-  mensClothing: string;
-  womansClothing: string;
+  allProducts: number;
+  mensClothing: number;
+  womansClothing: number;
 }
