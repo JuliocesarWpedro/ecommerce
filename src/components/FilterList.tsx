@@ -40,11 +40,14 @@ const FilterItem = styled.li<FilterItemProps>`
 `;
 
 const FilterList = () => {
-  const { typesProducts } = useFilter();
+  const { typesProducts, setOrderProducts } = useFilter();
   return (
     <FilterListTag>
       <FilterItem
         onClick={() => {
+          if (!(typesProducts === FilterType.allProducts)) {
+            setOrderProducts(null);
+          }
           window.history.pushState({}, '', `?typeProduct=allProducts&_page=1`);
         }}
         $selectedcategory={typesProducts === FilterType.allProducts ? 1 : 0}
@@ -53,6 +56,9 @@ const FilterList = () => {
       </FilterItem>
       <FilterItem
         onClick={() => {
+          if (!(typesProducts === FilterType.mensClothing)) {
+            setOrderProducts(null);
+          }
           window.history.pushState({}, '', `?typeProduct=mensClothing&_page=1`);
         }}
         $selectedcategory={typesProducts === FilterType.mensClothing ? 1 : 0}
@@ -61,6 +67,9 @@ const FilterList = () => {
       </FilterItem>
       <FilterItem
         onClick={() => {
+          if (!(typesProducts === FilterType.womansClothing)) {
+            setOrderProducts(null);
+          }
           window.history.pushState(
             {},
             '',

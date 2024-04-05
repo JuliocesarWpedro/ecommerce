@@ -1,7 +1,10 @@
 import React from 'react';
 import { ArrowIcon } from './icons/ArrowIcon';
 import styled from 'styled-components';
-import OrderProducts, { OrderProductsEnum } from '@/types/filterTypes';
+import OrderProducts, {
+  FilterType,
+  OrderProductsEnum,
+} from '@/types/filterTypes';
 import { useFilter } from '@/hooks/useFilter';
 
 const Container = styled.div`
@@ -63,7 +66,7 @@ const OrderBy = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const orderByTagRef = React.useRef<HTMLDivElement>(null);
   const spanRef = React.useRef<HTMLSpanElement>(null);
-  const { setOrderProducts } = useFilter();
+  const { typesProducts, orderProducts, setOrderProducts } = useFilter();
 
   const handleClickOutsideLanguageDropdown = React.useCallback(
     (e: Event) => {
@@ -111,16 +114,14 @@ const OrderBy = () => {
             <OrderByOpenItem
               key={index}
               onClick={() => {
+                window.history.pushState(
+                  {},
+                  '',
+                  `?typeProduct=${FilterType[
+                    typesProducts
+                  ].toString()}&_sort=${key}&_page=1`,
+                );
                 setOpenModal((valueModal) => !valueModal);
-                if (key === 'news') {
-                  setOrderProducts(OrderProductsEnum.news);
-                }
-                if (key === 'HigherLower') {
-                  setOrderProducts(OrderProductsEnum.HigherLower);
-                }
-                if (key === 'LowerHigher') {
-                  setOrderProducts(OrderProductsEnum.LowerHigher);
-                }
               }}
             >
               {value}

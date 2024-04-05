@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { usePagination } from '@/hooks/usePagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useFilter } from '@/hooks/useFilter';
-import { FilterType } from '@/types/filterTypes';
+import { FilterType, OrderProductsEnum } from '@/types/filterTypes';
 
 interface PaginationSelectProps {
   $selectedPage: boolean;
@@ -56,45 +56,81 @@ const PaginationSelect = styled.li<PaginationSelectProps>`
 
 const PaginationListComponent = () => {
   const { currentPage, totalPages } = usePagination();
-  const { typesProducts } = useFilter();
+  const { typesProducts, orderProducts } = useFilter();
   const minPages = 2;
   const slidesPerView = 4;
 
   const handlePageClick = (pageNumber: number) => {
     if (pageNumber !== currentPage) {
-      window.history.pushState(
-        {},
-        '',
-        `?typeProduct=${FilterType[
-          typesProducts
-        ].toString()}&_page=${pageNumber}`,
-      );
+      if (orderProducts) {
+        window.history.pushState(
+          {},
+          '',
+          `?typeProduct=${FilterType[
+            typesProducts
+          ].toString()}&_sort=${OrderProductsEnum[
+            orderProducts
+          ].toString()}&_page=${pageNumber}`,
+        );
+      } else {
+        window.history.pushState(
+          {},
+          '',
+          `?typeProduct=${FilterType[
+            typesProducts
+          ].toString()}&_page=${pageNumber}`,
+        );
+      }
     }
   };
 
   const handleNextPage = () => {
     if (currentPage >= 1 && currentPage < totalPages) {
       const nextPage = currentPage + 1;
-      window.history.pushState(
-        {},
-        '',
-        `?typeProduct=${FilterType[
-          typesProducts
-        ].toString()}&_page=${nextPage}`,
-      );
+      if (orderProducts) {
+        window.history.pushState(
+          {},
+          '',
+          `?typeProduct=${FilterType[
+            typesProducts
+          ].toString()}&_sort=${OrderProductsEnum[
+            orderProducts
+          ].toString()}&_page=${nextPage}`,
+        );
+      } else {
+        window.history.pushState(
+          {},
+          '',
+          `?typeProduct=${FilterType[
+            typesProducts
+          ].toString()}&_page=${nextPage}`,
+        );
+      }
     }
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       const previousPage = currentPage - 1;
-      window.history.pushState(
-        {},
-        '',
-        `?typeProduct=${FilterType[
-          typesProducts
-        ].toString()}&_page=${previousPage}`,
-      );
+      if (orderProducts) {
+        window.history.pushState(
+          {},
+          '',
+          `?typeProduct=${FilterType[
+            typesProducts
+          ].toString()}&_sort=${OrderProductsEnum[
+            orderProducts
+          ].toString()}&_page=${previousPage}`,
+        );
+      } else {
+        window.history.pushState(
+          {},
+          '',
+          `?typeProduct=${FilterType[
+            typesProducts
+          ].toString()}&_page=${previousPage}`,
+        );
+      }
     }
   };
 

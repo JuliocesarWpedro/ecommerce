@@ -2,6 +2,7 @@ import OrderProducts, {
   FilterType,
   OrderProductsEnum,
 } from '@/types/filterTypes';
+import { useSearchParams } from 'next/navigation';
 import React from 'react';
 
 interface FilterContextProps {
@@ -21,15 +22,32 @@ export function FilterContextProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const searchParams = useSearchParams();
   const [typesProducts, setTypesProducts] = React.useState(
     FilterType.allProducts,
   );
+
   const [orderProducts, setOrderProducts] =
     React.useState<OrderProductsEnum | null>(null);
 
-  if (orderProducts) {
-    console.log(OrderProductsEnum[orderProducts].toString());
-  }
+  const sortSearchParam = searchParams.get('_sort');
+  const orderSearchParam = searchParams.get('_order');
+
+  React.useEffect(() => {
+    if (sortSearchParam && OrderProductsEnum.hasOwnProperty(sortSearchParam)) {
+      if (sortSearchParam === 'news') {
+        setOrderProducts(OrderProductsEnum['news']);
+      }
+      if (sortSearchParam === 'HigherLower') {
+        setOrderProducts(OrderProductsEnum['HigherLower']);
+      }
+      if (sortSearchParam === 'LowerHigher') {
+        setOrderProducts(OrderProductsEnum['LowerHigher']);
+      }
+    }
+  }, [sortSearchParam]);
+
+  console.log(orderProducts);
 
   return (
     <FilterContext.Provider
