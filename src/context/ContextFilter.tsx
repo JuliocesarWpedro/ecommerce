@@ -47,8 +47,6 @@ export function FilterContextProvider({
     }
   }, [sortSearchParam]);
 
-  console.log(orderProducts);
-
   return (
     <FilterContext.Provider
       value={{

@@ -9,6 +9,7 @@ import Product from './Product';
 import { usePagination } from '@/hooks/usePagination';
 import { useFilter } from '@/hooks/useFilter';
 import { FilterType, OrderProductsEnum } from '@/types/filterTypes';
+import SkeletonProducts from './SkeletonProducts';
 
 const ContainerProducts = styled.div`
   min-height: 100vh;
@@ -20,6 +21,21 @@ const ContainerProducts = styled.div`
   align-items: center;
   justify-content: center;
   gap: 32px;
+`;
+
+const LoadingProduct = styled.div`
+  background: #f3f3f3;
+  display: flex;
+  flex-direction: column;
+  width: 195px;
+  height: 378px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  @keyframes pulse {
+    50% {
+      opacity: 0.5;
+    }
+  }
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 `;
 
 const ProductsList = () => {
@@ -60,11 +76,10 @@ const ProductsList = () => {
         }
       }
     }
-    console.log(url);
     setFetchUrl(url);
   }, [typesProducts, currentPage, perPage, orderProducts]);
 
-  const { data } = useFetch<ProductsFetchResponse>(fetchUrl);
+  const { data, loading } = useFetch<ProductsFetchResponse>(fetchUrl);
 
   const orderedProducts = React.useMemo(() => {
     if (data && Array.isArray(data)) {
@@ -92,13 +107,16 @@ const ProductsList = () => {
 
   return (
     <ContainerProducts>
-      {data &&
+      {loading && <SkeletonProducts />}
+      {!loading &&
+        data &&
         Array.isArray(data) &&
         !orderedProducts &&
         data.map((product: ProductType) => (
           <Product key={product.id} product={product} />
         ))}
-      {data &&
+      {!loading &&
+        data &&
         Array.isArray(data) &&
         orderedProducts &&
         orderedProducts.map((product: ProductType) => (
