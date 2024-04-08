@@ -6,7 +6,7 @@ function ReturnArrowIcon() {
       xmlns="http://www.w3.org/2000/svg"
       width="20"
       height="20"
-      fill="var(--text-dark-2)"
+      fill="#fff"
       version="1.1"
       viewBox="0 0 512 512"
       xmlSpace="preserve"

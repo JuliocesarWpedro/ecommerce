@@ -41,6 +41,7 @@ const NotFoundTitle = styled.h1`
 `;
 
 export const LinkButton = styled(Link)`
+  user-select: none;
   gap: 10px;
   font-size: 16px;
   font-weight: 500;
@@ -51,9 +52,9 @@ export const LinkButton = styled(Link)`
   width: 448px;
   height: 44px;
   text-decoration: none;
-  border-radius: 4px 0px 0px 0px;
-  background-color: var(--bg-secondary);
-  color: var(--text-dark-2);
+  border-radius: 4px;
+  background-color: var(--text-dark-2);
+  color: #fff;
 
   @media (max-width: 600px) {
     width: 100%;
@@ -65,7 +66,7 @@ export const LinkButton = styled(Link)`
   }
 
   &:hover {
-    background-color: var(--bg-primary);
+    background-color: #373742;
   }
 `;
 
