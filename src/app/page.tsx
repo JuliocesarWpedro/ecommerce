@@ -3,14 +3,13 @@ import FilterList from '@/components/FilterList';
 import Pagination from '@/components/Pagination';
 import PaginationListComponent from '@/components/PaginationListComponent';
 import ProductsList from '@/components/ProductsList';
-import { PaginationContextProvider } from '@/context/ContextPagination';
-import { FilterContextProvider } from '@/context/ContextFilter';
+import { ProductsContextProvider } from '@/context/ContextProducts';
 import styled from 'styled-components';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const MainContainer = styled.main`
   display: flex;
   flex-direction: column;
-  height: max-content;
   width: 100%;
   background-color: var(--bg-secondary);
   padding: 0 160px;
@@ -48,13 +47,14 @@ const ContainerPagination = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 74px 0px 60px 0px;
 `;
+
+const queryClient = new QueryClient();
 
 export default function Home() {
   return (
-    <FilterContextProvider>
-      <PaginationContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <ProductsContextProvider>
         <MainContainer>
           <ContainerFilterAndPagination>
             <FilterList />
@@ -65,7 +65,7 @@ export default function Home() {
             <PaginationListComponent />
           </ContainerPagination>
         </MainContainer>
-      </PaginationContextProvider>
-    </FilterContextProvider>
+      </ProductsContextProvider>
+    </QueryClientProvider>
   );
 }
