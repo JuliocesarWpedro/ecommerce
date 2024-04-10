@@ -63,20 +63,22 @@ const PaginationListComponent = () => {
   const slidesPerView = 4;
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }, 200);
   };
 
   const handlePageClick = (pageNumber: number) => {
     if (pageNumber !== currentPage) {
-      scrollToTop();
       if (pageSearchQueryParam) {
         const searchValueAdjusted = pageSearchQueryParam.replace(
           /\s+(?=\S)/g,
           '+',
         );
+        scrollToTop();
         if (orderProducts) {
           window.history.pushState(
             {},
@@ -91,6 +93,7 @@ const PaginationListComponent = () => {
             '',
             `?search_query=${searchValueAdjusted}&_page=${pageNumber}`,
           );
+          scrollToTop();
         }
       }
       if (!pageSearchQueryParam && orderProducts) {
@@ -103,6 +106,7 @@ const PaginationListComponent = () => {
             orderProducts
           ].toString()}&_page=${pageNumber}`,
         );
+        scrollToTop();
       }
       if (!pageSearchQueryParam && !orderProducts) {
         window.history.pushState(
@@ -112,6 +116,7 @@ const PaginationListComponent = () => {
             typesProducts
           ].toString()}&_page=${pageNumber}`,
         );
+        scrollToTop();
       }
     }
   };
@@ -119,7 +124,6 @@ const PaginationListComponent = () => {
   const handleNextPage = () => {
     if (currentPage >= 1 && currentPage < totalPages) {
       const nextPage = currentPage + 1;
-      scrollToTop();
       if (pageSearchQueryParam) {
         const searchValueAdjusted = pageSearchQueryParam.replace(
           /\s+(?=\S)/g,
@@ -133,12 +137,14 @@ const PaginationListComponent = () => {
               orderProducts
             ].toString()}&_page=${nextPage}`,
           );
+          scrollToTop();
         } else {
           window.history.pushState(
             {},
             '',
             `?search_query=${searchValueAdjusted}&_page=${nextPage}`,
           );
+          scrollToTop();
         }
       }
       if (!pageSearchQueryParam && orderProducts) {
@@ -151,6 +157,7 @@ const PaginationListComponent = () => {
             orderProducts
           ].toString()}&_page=${nextPage}`,
         );
+        scrollToTop();
       }
       if (!pageSearchQueryParam && !orderProducts) {
         window.history.pushState(
@@ -160,13 +167,13 @@ const PaginationListComponent = () => {
             typesProducts
           ].toString()}&_page=${nextPage}`,
         );
+        scrollToTop();
       }
     }
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
-      scrollToTop();
       const previousPage = currentPage - 1;
       if (pageSearchQueryParam) {
         const searchValueAdjusted = pageSearchQueryParam.replace(
@@ -181,12 +188,14 @@ const PaginationListComponent = () => {
               orderProducts
             ].toString()}&_page=${previousPage}`,
           );
+          scrollToTop();
         } else {
           window.history.pushState(
             {},
             '',
             `?search_query=${searchValueAdjusted}&_page=${previousPage}`,
           );
+          scrollToTop();
         }
       }
       if (!pageSearchQueryParam && orderProducts) {
@@ -199,6 +208,7 @@ const PaginationListComponent = () => {
             orderProducts
           ].toString()}&_page=${previousPage}`,
         );
+        scrollToTop();
       }
       if (!pageSearchQueryParam && !orderProducts) {
         window.history.pushState(
@@ -208,6 +218,7 @@ const PaginationListComponent = () => {
             typesProducts
           ].toString()}&_page=${previousPage}`,
         );
+        scrollToTop();
       }
     }
   };
