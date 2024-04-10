@@ -1,29 +1,15 @@
 import React from 'react';
 import { ArrowIcon } from './icons/ArrowIcon';
 import styled from 'styled-components';
-import { usePagination } from '@/hooks/usePagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useFilter } from '@/hooks/useFilter';
 import { FilterType, OrderProductsEnum } from '@/types/filterTypes';
+import { useContextProducts } from '@/hooks/useContextProducts';
 
 interface PaginationSelectProps {
   $selectedPage: boolean;
   $disabled: boolean;
   onClick: () => void;
 }
-
-const PaginationList = styled.ul`
-  display: flex;
-  gap: 2px;
-  color: var(--text-dark);
-  align-items: center;
-  list-style: none;
-  justify-content: center;
-
-  @media (max-width: 1120px) {
-    gap: 10px;
-  }
-`;
 
 const PaginationSelect = styled.li<PaginationSelectProps>`
   cursor: ${(props) => (props.$disabled ? 'not-allowed' : 'pointer')};
@@ -55,14 +41,40 @@ const PaginationSelect = styled.li<PaginationSelectProps>`
 `;
 
 const PaginationListComponent = () => {
-  const { currentPage, totalPages } = usePagination();
-  const { typesProducts, orderProducts } = useFilter();
+  const {
+    currentPage,
+    totalPages,
+    typesProducts,
+    orderProducts,
+    pageSearchQueryParam,
+  } = useContextProducts();
   const minPages = 2;
   const slidesPerView = 4;
 
   const handlePageClick = (pageNumber: number) => {
     if (pageNumber !== currentPage) {
-      if (orderProducts) {
+      if (pageSearchQueryParam) {
+        const searchValueAdjusted = pageSearchQueryParam.replace(
+          /\s+(?=\S)/g,
+          '+',
+        );
+        if (orderProducts) {
+          window.history.pushState(
+            {},
+            '',
+            `?search_query=${searchValueAdjusted}&_sort=${OrderProductsEnum[
+              orderProducts
+            ].toString()}&_page=${pageNumber}`,
+          );
+        } else {
+          window.history.pushState(
+            {},
+            '',
+            `?search_query=${searchValueAdjusted}&_page=${pageNumber}`,
+          );
+        }
+      }
+      if (!pageSearchQueryParam && orderProducts) {
         window.history.pushState(
           {},
           '',
@@ -72,7 +84,8 @@ const PaginationListComponent = () => {
             orderProducts
           ].toString()}&_page=${pageNumber}`,
         );
-      } else {
+      }
+      if (!pageSearchQueryParam && !orderProducts) {
         window.history.pushState(
           {},
           '',
@@ -87,7 +100,28 @@ const PaginationListComponent = () => {
   const handleNextPage = () => {
     if (currentPage >= 1 && currentPage < totalPages) {
       const nextPage = currentPage + 1;
-      if (orderProducts) {
+      if (pageSearchQueryParam) {
+        const searchValueAdjusted = pageSearchQueryParam.replace(
+          /\s+(?=\S)/g,
+          '+',
+        );
+        if (orderProducts) {
+          window.history.pushState(
+            {},
+            '',
+            `?search_query=${searchValueAdjusted}&_sort=${OrderProductsEnum[
+              orderProducts
+            ].toString()}&_page=${nextPage}`,
+          );
+        } else {
+          window.history.pushState(
+            {},
+            '',
+            `?search_query=${searchValueAdjusted}&_page=${nextPage}`,
+          );
+        }
+      }
+      if (!pageSearchQueryParam && orderProducts) {
         window.history.pushState(
           {},
           '',
@@ -97,7 +131,8 @@ const PaginationListComponent = () => {
             orderProducts
           ].toString()}&_page=${nextPage}`,
         );
-      } else {
+      }
+      if (!pageSearchQueryParam && !orderProducts) {
         window.history.pushState(
           {},
           '',
@@ -112,7 +147,28 @@ const PaginationListComponent = () => {
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       const previousPage = currentPage - 1;
-      if (orderProducts) {
+      if (pageSearchQueryParam) {
+        const searchValueAdjusted = pageSearchQueryParam.replace(
+          /\s+(?=\S)/g,
+          '+',
+        );
+        if (orderProducts) {
+          window.history.pushState(
+            {},
+            '',
+            `?search_query=${searchValueAdjusted}&_sort=${OrderProductsEnum[
+              orderProducts
+            ].toString()}&_page=${previousPage}`,
+          );
+        } else {
+          window.history.pushState(
+            {},
+            '',
+            `?search_query=${searchValueAdjusted}&_page=${previousPage}`,
+          );
+        }
+      }
+      if (!pageSearchQueryParam && orderProducts) {
         window.history.pushState(
           {},
           '',
@@ -122,7 +178,8 @@ const PaginationListComponent = () => {
             orderProducts
           ].toString()}&_page=${previousPage}`,
         );
-      } else {
+      }
+      if (!pageSearchQueryParam && !orderProducts) {
         window.history.pushState(
           {},
           '',
@@ -163,6 +220,7 @@ const PaginationListComponent = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        paddingBottom: '32px',
       }}
     >
       <Swiper spaceBetween={5} slidesPerView={slidesPerView} loop={false}>

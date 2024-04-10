@@ -1,5 +1,3 @@
-import useFetch from '@/hooks/useFetch';
-import { QuantityFetchResponse } from '@/types/productsFetchResponse';
 import React from 'react';
 import { useSearchParams } from 'next/navigation';
 import { FilterType, OrderProductsEnum } from '@/types/filterTypes';
@@ -53,13 +51,21 @@ export function ProductsContextProvider({
   >(null);
   let url = 'https://api-storage-products.vercel.app/quantitys';
 
+  if (pageSearchQueryParam) {
+    const valueSearchReplaced = pageSearchQueryParam.replace(
+      /\s+(?=\S)/g,
+      '%20',
+    );
+    url = `https://api-storage-products.vercel.app/products?q=${valueSearchReplaced}`;
+  }
+
   const fetchData = async () => {
     const response = await fetch(url);
     return response.json();
   };
 
   const { data } = useQuery({
-    queryKey: [totalItems],
+    queryKey: [totalItems, pageSearchQueryParam],
     queryFn: fetchData,
     staleTime: 1000 * 60 * 60 * 24,
   });
@@ -84,14 +90,6 @@ export function ProductsContextProvider({
       setValueSearchReplaced(null);
     }
   }, [pageSearchQueryParam]);
-
-  if (pageSearchQueryParam) {
-    const valueSearchReplaced = pageSearchQueryParam.replace(
-      /\s+(?=\S)/g,
-      '%20',
-    );
-    url = `https://api-storage-products.vercel.app/products?q=${valueSearchReplaced}`;
-  }
 
   React.useEffect(() => {
     if (data) {
@@ -135,6 +133,8 @@ export function ProductsContextProvider({
       setCurrentPage(1);
     }
   }, [totalPages, currentPage]);
+
+  console.log(totalItems);
 
   return (
     <ProductsContext.Provider

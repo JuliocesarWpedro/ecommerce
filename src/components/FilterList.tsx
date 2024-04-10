@@ -1,4 +1,4 @@
-import { useFilter } from '@/hooks/useFilter';
+import { useContextProducts } from '@/hooks/useContextProducts';
 import { FilterType } from '@/types/filterTypes';
 import FilterItemProps from '@/types/productsCategorys';
 import React from 'react';
@@ -40,7 +40,7 @@ const FilterItem = styled.li<FilterItemProps>`
 `;
 
 const FilterList = () => {
-  const { typesProducts, setOrderProducts } = useFilter();
+  const { typesProducts, setOrderProducts } = useContextProducts();
   return (
     <FilterListTag>
       <FilterItem
@@ -63,7 +63,7 @@ const FilterList = () => {
         }}
         $selectedcategory={typesProducts === FilterType.mensClothing ? 1 : 0}
       >
-        Blusas Masculinas
+        Roupas Masculinas
       </FilterItem>
       <FilterItem
         onClick={() => {
@@ -78,7 +78,7 @@ const FilterList = () => {
         }}
         $selectedcategory={typesProducts === FilterType.womansClothing ? 1 : 0}
       >
-        Blusas femininas
+        Roupas femininas
       </FilterItem>
     </FilterListTag>
   );

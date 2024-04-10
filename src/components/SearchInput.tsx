@@ -51,7 +51,9 @@ const SearchInput = () => {
   const [inputValue, setInputValue] = React.useState<string>('');
 
   function handleSubmit(value: string) {
-    console.log(value);
+    const adjustedValue = inputValue.replace(/\s+(?=\S)/g, '+');
+    window.history.pushState({}, '', `?search_query=${adjustedValue}`);
+    setInputValue('');
   }
 
   return (

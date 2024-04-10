@@ -1,11 +1,8 @@
 import React from 'react';
 import { ArrowIcon } from './icons/ArrowIcon';
 import styled from 'styled-components';
-import OrderProducts, {
-  FilterType,
-  OrderProductsEnum,
-} from '@/types/filterTypes';
-import { useFilter } from '@/hooks/useFilter';
+import OrderProducts, { FilterType } from '@/types/filterTypes';
+import { useContextProducts } from '@/hooks/useContextProducts';
 
 const Container = styled.div`
   position: relative;
@@ -66,7 +63,8 @@ const OrderBy = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const orderByTagRef = React.useRef<HTMLDivElement>(null);
   const spanRef = React.useRef<HTMLSpanElement>(null);
-  const { typesProducts, orderProducts, setOrderProducts } = useFilter();
+  const { typesProducts, pageSearchQueryParam, totalItems } =
+    useContextProducts();
 
   const handleClickOutsideLanguageDropdown = React.useCallback(
     (e: Event) => {
@@ -101,36 +99,49 @@ const OrderBy = () => {
   }, [handleClickOutsideLanguageDropdown]);
 
   return (
-    <Container ref={containerRef}>
-      <OrderByTag
-        ref={orderByTagRef}
-        onClick={() => setOpenModal((value) => !value)}
-      >
-        <span ref={spanRef}>Organizar por</span> <ArrowIcon rotationDeg="0" />
-      </OrderByTag>
-      {openModal && (
-        <OrderByOpen ref={dropDownModal}>
-          {Object.entries(ORDERBYOPTIONS).map(([key, value], index) => (
-            <OrderByOpenItem
-              key={index}
-              onClick={() => {
-                window.history.pushState(
-                  {},
-                  '',
-                  `?typeProduct=${FilterType[
-                    typesProducts
-                  ].toString()}&_sort=${key}&_page=1`,
-                );
-                setOpenModal((valueModal) => !valueModal);
-              }}
-            >
-              {value}
-            </OrderByOpenItem>
-          ))}
-        </OrderByOpen>
-      )}
-    </Container>
+    !(totalItems === 0) && (
+      <Container ref={containerRef}>
+        <OrderByTag
+          ref={orderByTagRef}
+          onClick={() => setOpenModal((value) => !value)}
+        >
+          <span ref={spanRef}>Organizar por</span> <ArrowIcon rotationDeg="0" />
+        </OrderByTag>
+        {openModal && (
+          <OrderByOpen ref={dropDownModal}>
+            {Object.entries(ORDERBYOPTIONS).map(([key, value], index) => (
+              <OrderByOpenItem
+                key={index}
+                onClick={() => {
+                  if (pageSearchQueryParam) {
+                    const searchValueAdjusted = pageSearchQueryParam.replace(
+                      /\s+(?=\S)/g,
+                      '+',
+                    );
+                    window.history.pushState(
+                      {},
+                      '',
+                      `?search_query=${searchValueAdjusted}&_sort=${key}&_page=1`,
+                    );
+                  } else {
+                    window.history.pushState(
+                      {},
+                      '',
+                      `?typeProduct=${FilterType[
+                        typesProducts
+                      ].toString()}&_sort=${key}&_page=1`,
+                    );
+                  }
+                  setOpenModal((valueModal) => !valueModal);
+                }}
+              >
+                {value}
+              </OrderByOpenItem>
+            ))}
+          </OrderByOpen>
+        )}
+      </Container>
+    )
   );
 };
-
 export default OrderBy;

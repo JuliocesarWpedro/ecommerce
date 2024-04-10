@@ -1,64 +1,113 @@
-import useFetch from '@/hooks/useFetch';
-import {
-  ProductType,
-  ProductsFetchResponse,
-} from '@/types/productsFetchResponse';
+import { ProductType } from '@/types/productsFetchResponse';
 import React from 'react';
 import styled from 'styled-components';
 import Product from './Product';
-import { usePagination } from '@/hooks/usePagination';
-import { useFilter } from '@/hooks/useFilter';
 import { FilterType, OrderProductsEnum } from '@/types/filterTypes';
 import SkeletonProducts from './SkeletonProducts';
+import { useQuery } from '@tanstack/react-query';
+import { useContextProducts } from '@/hooks/useContextProducts';
+import Link from 'next/link';
 
 const ContainerProducts = styled.div`
   min-height: 100vh;
-  padding-top: 32px;
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto;
   height: 100%;
-  align-items: center;
   justify-content: center;
   gap: 32px;
+  padding-bottom: 74px;
 `;
 
-const LoadingProduct = styled.div`
-  background: #f3f3f3;
-  display: flex;
-  flex-direction: column;
-  width: 195px;
-  height: 378px;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  @keyframes pulse {
-    50% {
-      opacity: 0.5;
-    }
+const NoProductsTitle = styled.p`
+  text-align: center;
+  font-weight: bold;
+  font-size: 40px;
+  line-height: 60px;
+  letter-spacing: 0em;
+  color: var(--text-dark);
+  @media (max-width: 580px) {
+    font-size: 30px;
   }
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  @media (max-width: 440px) {
+    font-size: 20px;
+  }
+`;
+
+export const LinkButton = styled(Link)`
+  user-select: none;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 448px;
+  height: 44px;
+  text-decoration: none;
+  border-radius: 4px;
+  background-color: var(--text-dark-2);
+  color: #fff;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    padding: 0px 20px;
+  }
+  @media (max-width: 330px) {
+    width: 100%;
+    padding: 0px 10px;
+  }
+
+  &:hover {
+    background-color: #373742;
+  }
+`;
+
+const ContainerNoProductsSearch = styled.div`
+  display: flex;
+  padding-top: 60px;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  text-align: center;
+  height: calc(100vh - 100px - 38px - 60px);
 `;
 
 const ProductsList = () => {
-  const { currentPage, perPage } = usePagination();
-  const { typesProducts, orderProducts } = useFilter();
-  const [fetchUrl, setFetchUrl] = React.useState<string>(
-    `https://api-storage-products.vercel.app/products?_page=${currentPage}&_limit=${perPage}`,
-  );
+  const {
+    currentPage,
+    perPage,
+    typesProducts,
+    orderProducts,
+    valueSearchReplaced,
+    setTotalItems,
+    setTotalPages,
+  } = useContextProducts();
+
+  const [noProductsInSearch, setNoProductsInSearch] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
+    if (noProductsInSearch) {
+      setTotalItems(0);
+      setTotalPages(0);
+    }
+  }, [noProductsInSearch, setTotalItems, setTotalPages]);
+
+  const fetchUrl = React.useMemo(() => {
     let url = `https://api-storage-products.vercel.app/products?_page=${currentPage}&_limit=${perPage}`;
+    const category = FilterType[typesProducts].toString();
 
     if (typesProducts !== FilterType.allProducts) {
-      const category = FilterType[typesProducts].toString();
       url = `https://api-storage-products.vercel.app/products?category=${category}&_page=${currentPage}&_limit=${perPage}`;
     }
     if (orderProducts) {
-      const category = FilterType[typesProducts].toString();
       if (orderProducts === OrderProductsEnum.news) {
-        if (typesProducts !== FilterType.allProducts) {
-          url = `https://api-storage-products.vercel.app/products?category=${category}&_sort=id&_order=asc&_page=${currentPage}&_limit=${perPage}`;
-        } else {
+        if (typesProducts === FilterType.allProducts) {
           url = `https://api-storage-products.vercel.app/products?_sort=id&_order=asc&_page=${currentPage}&_limit=${perPage}`;
+        } else {
+          url = `https://api-storage-products.vercel.app/products?category=${category}&_sort=id&_order=asc&_page=${currentPage}&_limit=${perPage}`;
         }
       }
       if (orderProducts === OrderProductsEnum.LowerHigher) {
@@ -76,10 +125,38 @@ const ProductsList = () => {
         }
       }
     }
-    setFetchUrl(url);
-  }, [typesProducts, currentPage, perPage, orderProducts]);
+    if (valueSearchReplaced) {
+      url = `https://api-storage-products.vercel.app/products?q=${valueSearchReplaced}&_page=${currentPage}&_limit=${perPage}`;
+    }
 
-  const { data, loading } = useFetch<ProductsFetchResponse>(fetchUrl);
+    return url;
+  }, [typesProducts, currentPage, perPage, orderProducts, valueSearchReplaced]);
+
+  const fetchData = async () => {
+    const response = await fetch(fetchUrl);
+    return response.json();
+  };
+
+  const { isPending, data } = useQuery({
+    queryKey: [
+      'products',
+      currentPage,
+      perPage,
+      typesProducts,
+      orderProducts,
+      valueSearchReplaced,
+    ],
+    queryFn: fetchData,
+    staleTime: 1000 * 60 * 60 * 24,
+  });
+
+  React.useEffect(() => {
+    if (valueSearchReplaced && !isPending && (!data || data.length === 0)) {
+      setNoProductsInSearch(true);
+    } else {
+      setNoProductsInSearch(false);
+    }
+  }, [valueSearchReplaced, data, isPending]);
 
   const orderedProducts = React.useMemo(() => {
     if (data && Array.isArray(data)) {
@@ -106,23 +183,33 @@ const ProductsList = () => {
   }, [data, orderProducts]);
 
   return (
-    <ContainerProducts>
-      {loading && <SkeletonProducts />}
-      {!loading &&
-        data &&
-        Array.isArray(data) &&
-        !orderedProducts &&
-        data.map((product: ProductType) => (
-          <Product key={product.id} product={product} />
-        ))}
-      {!loading &&
-        data &&
-        Array.isArray(data) &&
-        orderedProducts &&
-        orderedProducts.map((product: ProductType) => (
-          <Product key={product.id} product={product} />
-        ))}
-    </ContainerProducts>
+    <>
+      {noProductsInSearch && (
+        <ContainerNoProductsSearch>
+          <NoProductsTitle>Nenhum produto encontrado!</NoProductsTitle>
+          <LinkButton href={'/'}>Volte para a Home</LinkButton>
+        </ContainerNoProductsSearch>
+      )}
+      {!noProductsInSearch && (
+        <ContainerProducts>
+          {isPending && <SkeletonProducts />}
+          {!isPending &&
+            data &&
+            Array.isArray(data) &&
+            !orderedProducts &&
+            data.map((product: ProductType) => (
+              <Product key={product.id} product={product} />
+            ))}
+          {!isPending &&
+            data &&
+            Array.isArray(data) &&
+            orderedProducts &&
+            orderedProducts.map((product: ProductType) => (
+              <Product key={product.id} product={product} />
+            ))}
+        </ContainerProducts>
+      )}
+    </>
   );
 };
 
