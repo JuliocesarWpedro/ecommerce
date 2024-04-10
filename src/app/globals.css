@@ -22,11 +22,23 @@
 
 .swiper-wrapper {
   display: flex;
+  gap: 5px;
 }
 
 .swiper-slide {
   width: 32px !important;
   height: 32px !important;
+  margin-right: 0px !important;
+
+  @media (max-width: 1120px) {
+    width: 45px !important;
+    height: 45px !important;
+  }
+
+  @media (max-width: 580px) {
+    width: 37px !important;
+    height: 37px !important;
+  }
 }
 
 html,

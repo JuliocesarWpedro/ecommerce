@@ -134,8 +134,6 @@ export function ProductsContextProvider({
     }
   }, [totalPages, currentPage]);
 
-  console.log(totalItems);
-
   return (
     <ProductsContext.Provider
       value={{

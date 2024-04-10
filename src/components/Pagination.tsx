@@ -17,6 +17,7 @@ const ContainerPagination = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    padding-bottom: 20px;
   }
 
   @media (max-width: 525px) {

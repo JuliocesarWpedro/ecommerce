@@ -19,9 +19,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={saira.className}>
-      <Header />
-          {children}
+      <body className={saira.className} style={{ scrollBehavior: 'smooth' }}>
+        <Header />
+        {children}
       </body>
     </html>
   );

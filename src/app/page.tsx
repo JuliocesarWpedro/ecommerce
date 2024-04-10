@@ -47,6 +47,11 @@ const ContainerPagination = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+
+  @media (max-width: 1120px) {
+    justify-content: center;
+    padding-bottom: 20px;
+  }
 `;
 
 const queryClient = new QueryClient();

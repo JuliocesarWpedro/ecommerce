@@ -11,6 +11,17 @@ interface PaginationSelectProps {
   onClick: () => void;
 }
 
+const PaginationListContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding-bottom: 32px;
+  gap: 5px;
+
+  @media (max-width: 1120px) {
+    padding-bottom: 0px;
+  }
+`;
+
 const PaginationSelect = styled.li<PaginationSelectProps>`
   cursor: ${(props) => (props.$disabled ? 'not-allowed' : 'pointer')};
   width: 32px;
@@ -51,8 +62,16 @@ const PaginationListComponent = () => {
   const minPages = 2;
   const slidesPerView = 4;
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   const handlePageClick = (pageNumber: number) => {
     if (pageNumber !== currentPage) {
+      scrollToTop();
       if (pageSearchQueryParam) {
         const searchValueAdjusted = pageSearchQueryParam.replace(
           /\s+(?=\S)/g,
@@ -100,6 +119,7 @@ const PaginationListComponent = () => {
   const handleNextPage = () => {
     if (currentPage >= 1 && currentPage < totalPages) {
       const nextPage = currentPage + 1;
+      scrollToTop();
       if (pageSearchQueryParam) {
         const searchValueAdjusted = pageSearchQueryParam.replace(
           /\s+(?=\S)/g,
@@ -146,6 +166,7 @@ const PaginationListComponent = () => {
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
+      scrollToTop();
       const previousPage = currentPage - 1;
       if (pageSearchQueryParam) {
         const searchValueAdjusted = pageSearchQueryParam.replace(
@@ -215,14 +236,7 @@ const PaginationListComponent = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingBottom: '32px',
-      }}
-    >
+    <PaginationListContainer>
       <Swiper spaceBetween={5} slidesPerView={slidesPerView} loop={false}>
         {renderPaginationSelects()}
       </Swiper>
@@ -239,13 +253,12 @@ const PaginationListComponent = () => {
             $disabled={currentPage >= totalPages}
             $selectedPage={false}
             onClick={handleNextPage}
-            style={{ marginLeft: '5px' }}
           >
             <ArrowIcon rotationDeg="-90deg" />
           </PaginationSelect>
         </>
       )}
-    </div>
+    </PaginationListContainer>
   );
 };
 
