@@ -73,7 +73,13 @@ const Product = ({ product }: { product: ProductType }) => {
   return (
     <ProductItem>
       <LinkImg href="/">
-        <Image src={product.image} alt="" width={195} height={300} />
+        <Image
+          src={product.image}
+          alt=""
+          width={195}
+          height={300}
+          priority={true}
+        />
       </LinkImg>
       <TextContainer>
         <TitleProduct>{product.name}</TitleProduct>
