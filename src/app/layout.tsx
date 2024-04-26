@@ -3,8 +3,7 @@ import './globals.css';
 import { Saira } from 'next/font/google';
 import { ReactQueryClientProvider } from '@/components/ReactQueryClientProvider';
 import Footer from '@/components/Footer';
-import { Suspense } from 'react';
-import SkeletonProducts from '@/components/SkeletonProducts';
+
 
 const saira = Saira({
   weight: ['300', '400', '500', '600'],
@@ -26,7 +25,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={saira.className} style={{ scrollBehavior: 'smooth' }}>
           <Header />
-          <Suspense fallback={<SkeletonProducts />}>{children}</Suspense>
+           {children}
           <Footer />
         </body>
       </html>

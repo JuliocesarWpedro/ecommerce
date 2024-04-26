@@ -5,9 +5,9 @@ import PaginationListComponent from '@/components/PaginationListComponent';
 import ProductsList from '@/components/ProductsList';
 import { ProductsContextProvider } from '@/context/ContextProducts';
 import styled from 'styled-components';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Suspense } from 'react';
+import { QueryClient } from '@tanstack/react-query';
 import SkeletonProducts from '@/components/SkeletonProducts';
+import { Suspense } from 'react';
 
 const MainContainer = styled.main`
   display: flex;
@@ -60,19 +60,19 @@ const queryClient = new QueryClient();
 
 export default function Home() {
   return (
-    <ProductsContextProvider>
-      <MainContainer>
-        <ContainerFilterAndPagination>
-          <FilterList />
-          <Pagination />
-        </ContainerFilterAndPagination>
-        <Suspense fallback={<SkeletonProducts />}>
+    <Suspense fallback={<SkeletonProducts />}>
+      <ProductsContextProvider>
+        <MainContainer>
+          <ContainerFilterAndPagination>
+            <FilterList />
+            <Pagination />
+          </ContainerFilterAndPagination>
           <ProductsList></ProductsList>
-        </Suspense>
-        <ContainerPagination>
-          <PaginationListComponent />
-        </ContainerPagination>
-      </MainContainer>
-    </ProductsContextProvider>
+          <ContainerPagination>
+            <PaginationListComponent />
+          </ContainerPagination>
+        </MainContainer>
+      </ProductsContextProvider>
+    </Suspense>
   );
 }
