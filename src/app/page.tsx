@@ -60,8 +60,8 @@ const queryClient = new QueryClient();
 
 export default function Home() {
   return (
-    <Suspense fallback={<SkeletonProducts />}>
-      <ProductsContextProvider>
+    <ProductsContextProvider>
+      <Suspense fallback={<SkeletonProducts />}>
         <MainContainer>
           <ContainerFilterAndPagination>
             <FilterList />
@@ -72,7 +72,7 @@ export default function Home() {
             <PaginationListComponent />
           </ContainerPagination>
         </MainContainer>
-      </ProductsContextProvider>
-    </Suspense>
+      </Suspense>
+    </ProductsContextProvider>
   );
 }
