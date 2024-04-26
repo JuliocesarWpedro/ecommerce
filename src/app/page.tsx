@@ -61,7 +61,7 @@ const queryClient = new QueryClient();
 export default function Home() {
   return (
     <ProductsContextProvider>
-      <Suspense fallback={<SkeletonProducts />}>
+      <Suspense fallback={<div>Loading</div>}>
         <MainContainer>
           <ContainerFilterAndPagination>
             <FilterList />
