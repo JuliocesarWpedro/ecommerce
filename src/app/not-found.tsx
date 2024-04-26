@@ -1,6 +1,5 @@
 'use client';
-
-import ReturnArrowIcon from '@/components/icons/ReturnArrowIcon';
+import ReturnIcon from '@/components/icons/ReturnIcon';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
@@ -56,6 +55,13 @@ export const LinkButton = styled(Link)`
   background-color: var(--text-dark-2);
   color: #fff;
 
+  svg {
+    path {
+      color: #fff;
+      stroke: #fff;
+    }
+  }
+
   @media (max-width: 600px) {
     width: 100%;
     padding: 0px 20px;
@@ -76,7 +82,7 @@ const notFound = () => {
       <NotFoundTitle>Página não encontrada!</NotFoundTitle>
       <LinkButton href={'/'}>
         <p>Volte para a Home!</p>
-        <ReturnArrowIcon />
+        <ReturnIcon />
       </LinkButton>
     </NotFoundContainer>
   );
