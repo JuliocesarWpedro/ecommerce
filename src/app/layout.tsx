@@ -4,6 +4,7 @@ import { Saira } from 'next/font/google';
 import { ReactQueryClientProvider } from '@/components/ReactQueryClientProvider';
 import Footer from '@/components/Footer';
 
+
 const saira = Saira({
   weight: ['300', '400', '500', '600'],
   subsets: ['latin'],
@@ -24,7 +25,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={saira.className} style={{ scrollBehavior: 'smooth' }}>
           <Header />
-          {children}
+           {children}
           <Footer />
         </body>
       </html>
