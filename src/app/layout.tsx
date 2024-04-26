@@ -1,6 +1,8 @@
 import Header from '@/components/Header';
 import './globals.css';
 import { Saira } from 'next/font/google';
+import { ReactQueryClientProvider } from '@/components/ReactQueryClientProvider';
+import Footer from '@/components/Footer';
 
 const saira = Saira({
   weight: ['300', '400', '500', '600'],
@@ -18,11 +20,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={saira.className} style={{ scrollBehavior: 'smooth' }}>
-        <Header />
-        {children}
-      </body>
-    </html>
+    <ReactQueryClientProvider>
+      <html lang="en">
+        <body className={saira.className} style={{ scrollBehavior: 'smooth' }}>
+          <Header />
+          {children}
+          <Footer />
+        </body>
+      </html>
+    </ReactQueryClientProvider>
   );
 }
