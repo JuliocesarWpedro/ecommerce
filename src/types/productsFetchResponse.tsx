@@ -1,4 +1,4 @@
-export interface ProductType {
+export interface ProductDataType {
   id: number;
   category: 'womansClothing' | 'mensClothing';
   name: string;
@@ -11,7 +11,7 @@ export interface ProductType {
 }
 
 export interface ProductsFetchResponse {
-  products: ProductType[];
+  products: ProductDataType[];
 }
 
 export interface QuantityFetchResponse {

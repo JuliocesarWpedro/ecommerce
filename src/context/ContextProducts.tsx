@@ -129,10 +129,10 @@ export function ProductsContextProvider({
   }, [totalItems, perPage]);
 
   React.useEffect(() => {
-    if (currentPage > totalPages) {
+    if (!pageSearchParam && currentPage > totalPages) {
       setCurrentPage(1);
     }
-  }, [totalPages, currentPage]);
+  }, [totalPages, currentPage, pageSearchParam]);
 
   return (
     <ProductsContext.Provider

@@ -6,6 +6,8 @@ import ProductsList from '@/components/ProductsList';
 import { ProductsContextProvider } from '@/context/ContextProducts';
 import styled from 'styled-components';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Suspense } from 'react';
+import SkeletonProducts from '@/components/SkeletonProducts';
 
 const MainContainer = styled.main`
   display: flex;
@@ -58,19 +60,19 @@ const queryClient = new QueryClient();
 
 export default function Home() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ProductsContextProvider>
-        <MainContainer>
-          <ContainerFilterAndPagination>
-            <FilterList />
-            <Pagination />
-          </ContainerFilterAndPagination>
+    <ProductsContextProvider>
+      <MainContainer>
+        <ContainerFilterAndPagination>
+          <FilterList />
+          <Pagination />
+        </ContainerFilterAndPagination>
+        <Suspense fallback={<SkeletonProducts />}>
           <ProductsList></ProductsList>
-          <ContainerPagination>
-            <PaginationListComponent />
-          </ContainerPagination>
-        </MainContainer>
-      </ProductsContextProvider>
-    </QueryClientProvider>
+        </Suspense>
+        <ContainerPagination>
+          <PaginationListComponent />
+        </ContainerPagination>
+      </MainContainer>
+    </ProductsContextProvider>
   );
 }

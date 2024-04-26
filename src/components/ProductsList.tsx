@@ -1,4 +1,4 @@
-import { ProductType } from '@/types/productsFetchResponse';
+import { ProductDataType } from '@/types/productsFetchResponse';
 import React from 'react';
 import styled from 'styled-components';
 import Product from './Product';
@@ -94,6 +94,7 @@ const ProductsList = () => {
       setTotalPages(0);
     }
   }, [noProductsInSearch, setTotalItems, setTotalPages]);
+
 
   const fetchUrl = React.useMemo(() => {
     let url = `https://api-storage-products.vercel.app/products?_page=${currentPage}&_limit=${perPage}`;
@@ -197,14 +198,14 @@ const ProductsList = () => {
             data &&
             Array.isArray(data) &&
             !orderedProducts &&
-            data.map((product: ProductType) => (
+            data.map((product: ProductDataType) => (
               <Product key={product.id} product={product} />
             ))}
           {!isPending &&
             data &&
             Array.isArray(data) &&
             orderedProducts &&
-            orderedProducts.map((product: ProductType) => (
+            orderedProducts.map((product: ProductDataType) => (
               <Product key={product.id} product={product} />
             ))}
         </ContainerProducts>

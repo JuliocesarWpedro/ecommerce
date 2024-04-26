@@ -248,9 +248,11 @@ const PaginationListComponent = () => {
 
   return (
     <PaginationListContainer>
-      <Swiper spaceBetween={5} slidesPerView={slidesPerView} loop={false}>
-        {renderPaginationSelects()}
-      </Swiper>
+      <ul>
+        <Swiper spaceBetween={5} slidesPerView={slidesPerView} loop={false}>
+          {renderPaginationSelects()}
+        </Swiper>
+      </ul>
       {totalPages >= minPages && (
         <>
           <PaginationSelect
