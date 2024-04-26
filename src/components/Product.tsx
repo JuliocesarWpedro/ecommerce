@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ProductType } from '@/types/productsFetchResponse';
+import { ProductDataType } from '@/types/productsFetchResponse';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const formattedValue = (value: string) => {
   const formatted = parseFloat(value).toLocaleString('pt-BR', {
@@ -60,19 +61,27 @@ const PriceProduct = styled.span`
   text-align: left;
 `;
 
-const LinkImg = styled.a`
+const ContainerImg = styled.div`
   height: 300px;
+  cursor: pointer;
   border-radius: 8px 8px 0px 0px;
 
-  & > * {
+  img {
+    object-fit: cover;
     border-radius: 8px 8px 0px 0px;
   }
 `;
 
-const Product = ({ product }: { product: ProductType }) => {
+const Product = ({ product }: { product: ProductDataType }) => {
+  const router = useRouter();
+
+  const handlePageProduct = (id: number) => {
+    router.push(`product/${id}`);
+  };
+
   return (
     <ProductItem>
-      <LinkImg href="/">
+      <ContainerImg onClick={() => handlePageProduct(product.id)}>
         <Image
           src={product.image}
           alt=""
@@ -80,7 +89,7 @@ const Product = ({ product }: { product: ProductType }) => {
           height={300}
           priority={true}
         />
-      </LinkImg>
+      </ContainerImg>
       <TextContainer>
         <TitleProduct>{product.name}</TitleProduct>
         <LineSeparator />
