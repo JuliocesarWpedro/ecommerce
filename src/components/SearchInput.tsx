@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SearchIcon } from './icons/SearchIcon';
+import { useContextProducts } from '@/hooks/useContextProducts';
+import { FilterType } from '@/types/filterTypes';
 
 const SearchContainer = styled.form`
   display: flex;
@@ -49,8 +51,10 @@ const TagInputSearch = styled.input`
 
 const SearchInput = () => {
   const [inputValue, setInputValue] = React.useState<string>('');
+  const { setTypesProducts } = useContextProducts();
 
   function handleSubmit(value: string) {
+    setTypesProducts(FilterType.allProducts);
     const adjustedValue = inputValue.replace(/\s+(?=\S)/g, '+');
     window.history.pushState({}, '', `?search_query=${adjustedValue}`);
     setInputValue('');
