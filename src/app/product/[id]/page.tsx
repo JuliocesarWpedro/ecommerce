@@ -1,12 +1,16 @@
 'use client';
-import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
-import { ProductDataType } from '@/types/productsFetchResponse';
 import { CartIcon } from '@/components/icons/CartIcon';
 import ReturnIcon from '@/components/icons/ReturnIcon';
+import ProductDataFetch from './productDataFetch';
+interface ParamsProps {
+  params: {
+    id: string;
+  };
+}
 
 const ContainerProductPage = styled.div`
   display: flex;
@@ -41,6 +45,15 @@ const ContainerProductInformations = styled.section`
     width: 50%;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     object-fit: cover;
+  }
+
+  @media (max-width: 945px) {
+    flex-direction: column;
+    align-items: center;
+    img {
+      max-width: 100%;
+      width: 100%;
+    }
   }
 `;
 
@@ -103,6 +116,29 @@ const ContainerDescription = styled.div`
       }
     }
   }
+
+  @media (max-width: 945px) {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0;
+    width: 100%;
+    max-width: 80%;
+
+    button {
+      margin-bottom: 20px;
+    }
+  }
+
+  @media (max-width: 800px) {
+    max-width: 100%;
+  }
+
+  @media (max-width: 450px) {
+    button {
+      font-size: 14px;
+    }
+  }
 `;
 
 const ProductInfo = styled.div`
@@ -153,6 +189,14 @@ const ProductInfo = styled.div`
       color: #41414d;
     }
   }
+
+  @media (max-width: 945px) {
+    div {
+      p {
+        margin-top: 0px;
+      }
+    }
+  }
 `;
 
 const InstallmentPrice = styled.h4`
@@ -190,6 +234,10 @@ const SizeNumbers = styled.div`
     background: #115d8c;
     color: #fff;
   }
+
+  @media (max-width: 945px) {
+    padding-bottom: 20px;
+  }
 `;
 
 const formattedValue = (value: string) => {
@@ -204,23 +252,13 @@ const formattedValue = (value: string) => {
 
 const ProductPage = ({ params }: { params: { id: string } }) => {
   const id = Number(params.id);
+
   const router = useRouter();
   const handleNavigate = () => {
     router.back();
   };
 
-  const fetchUrl = `https://api-storage-products.vercel.app/products/${id}`;
-
-  const fetchData = async () => {
-    const response = await fetch(fetchUrl);
-    return response.json();
-  };
-
-  const { isLoading, data } = useQuery<ProductDataType>({
-    queryKey: ['product', id],
-    queryFn: fetchData,
-    staleTime: 1000 * 60 * 60 * 24,
-  });
+  const { isLoading, data, error } = ProductDataFetch({ id });
 
   const formatSizes = (sizes: string[]) => {
     const formattedSizes =

@@ -95,7 +95,6 @@ const ProductsList = () => {
     }
   }, [noProductsInSearch, setTotalItems, setTotalPages]);
 
-
   const fetchUrl = React.useMemo(() => {
     let url = `https://api-storage-products.vercel.app/products?_page=${currentPage}&_limit=${perPage}`;
     const category = FilterType[typesProducts].toString();

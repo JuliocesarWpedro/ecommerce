@@ -3,10 +3,8 @@ import FilterList from '@/components/FilterList';
 import Pagination from '@/components/Pagination';
 import PaginationListComponent from '@/components/PaginationListComponent';
 import ProductsList from '@/components/ProductsList';
-import { ProductsContextProvider } from '@/context/ContextProducts';
 import styled from 'styled-components';
 import { QueryClient } from '@tanstack/react-query';
-import SkeletonProducts from '@/components/SkeletonProducts';
 import { Suspense } from 'react';
 
 const MainContainer = styled.main`
@@ -60,19 +58,17 @@ const queryClient = new QueryClient();
 
 export default function Home() {
   return (
-      <Suspense fallback={<div>Loading</div>}>
-    <ProductsContextProvider>
-        <MainContainer>
-          <ContainerFilterAndPagination>
-            <FilterList />
-            <Pagination />
-          </ContainerFilterAndPagination>
-          <ProductsList></ProductsList>
-          <ContainerPagination>
-            <PaginationListComponent />
-          </ContainerPagination>
-        </MainContainer>
-    </ProductsContextProvider>
-      </Suspense>
+    <Suspense fallback={<div>Loading</div>}>
+      <MainContainer>
+        <ContainerFilterAndPagination>
+          <FilterList />
+          <Pagination />
+        </ContainerFilterAndPagination>
+        <ProductsList></ProductsList>
+        <ContainerPagination>
+          <PaginationListComponent />
+        </ContainerPagination>
+      </MainContainer>
+    </Suspense>
   );
 }
