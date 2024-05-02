@@ -9,6 +9,7 @@ const TagFooter = styled.footer`
   padding: 20px 160px;
   justify-content: center;
   align-items: center;
+  text-align: center;
   @media (max-width: 1050px) {
     padding: 20px 100px;
   }
