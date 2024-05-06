@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { ArrowIcon } from './icons/ArrowIcon';
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -247,31 +247,33 @@ const PaginationListComponent = () => {
   };
 
   return (
-    <PaginationListContainer>
-      <ul>
-        <Swiper spaceBetween={5} slidesPerView={slidesPerView} loop={false}>
-          {renderPaginationSelects()}
-        </Swiper>
-      </ul>
-      {totalPages >= minPages && (
-        <>
-          <PaginationSelect
-            $disabled={currentPage <= 1}
-            $selectedPage={false}
-            onClick={handlePreviousPage}
-          >
-            <ArrowIcon rotationDeg="90deg" />
-          </PaginationSelect>
-          <PaginationSelect
-            $disabled={currentPage >= totalPages}
-            $selectedPage={false}
-            onClick={handleNextPage}
-          >
-            <ArrowIcon rotationDeg="-90deg" />
-          </PaginationSelect>
-        </>
-      )}
-    </PaginationListContainer>
+    <Suspense fallback={<div>Loading...</div>}>
+      <PaginationListContainer>
+        <ul>
+          <Swiper spaceBetween={5} slidesPerView={slidesPerView} loop={false}>
+            {renderPaginationSelects()}
+          </Swiper>
+        </ul>
+        {totalPages >= minPages && (
+          <>
+            <PaginationSelect
+              $disabled={currentPage <= 1}
+              $selectedPage={false}
+              onClick={handlePreviousPage}
+            >
+              <ArrowIcon rotationDeg="90deg" />
+            </PaginationSelect>
+            <PaginationSelect
+              $disabled={currentPage >= totalPages}
+              $selectedPage={false}
+              onClick={handleNextPage}
+            >
+              <ArrowIcon rotationDeg="-90deg" />
+            </PaginationSelect>
+          </>
+        )}
+      </PaginationListContainer>
+    </Suspense>
   );
 };
 

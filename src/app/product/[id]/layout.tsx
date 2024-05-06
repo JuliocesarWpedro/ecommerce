@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { generateProductMetadata } from './productMetadata';
-import { Suspense } from 'react';
 
 export async function generateMetadata({
   params,
@@ -11,11 +10,7 @@ export async function generateMetadata({
 }
 
 const ProductLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div>
-      <Suspense fallback={<div>Loading</div>}>{children}</Suspense>
-    </div>
-  );
+  return <div>{children}</div>;
 };
 
 export default ProductLayout;

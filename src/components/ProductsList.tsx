@@ -1,5 +1,5 @@
 import { ProductDataType } from '@/types/productsFetchResponse';
-import React from 'react';
+import React, { Suspense } from 'react';
 import styled from 'styled-components';
 import Product from './Product';
 import { FilterType, OrderProductsEnum } from '@/types/filterTypes';
@@ -87,7 +87,6 @@ const ProductsList = () => {
 
   const [noProductsInSearch, setNoProductsInSearch] =
     React.useState<boolean>(false);
-
   React.useEffect(() => {
     if (noProductsInSearch) {
       setTotalItems(0);
@@ -184,31 +183,33 @@ const ProductsList = () => {
 
   return (
     <>
-      {noProductsInSearch && (
-        <ContainerNoProductsSearch>
-          <NoProductsTitle>Nenhum produto encontrado!</NoProductsTitle>
-          <LinkButton href={'/'}>Volte para a Home</LinkButton>
-        </ContainerNoProductsSearch>
-      )}
-      {!noProductsInSearch && (
-        <ContainerProducts>
-          {isPending && <SkeletonProducts />}
-          {!isPending &&
-            data &&
-            Array.isArray(data) &&
-            !orderedProducts &&
-            data.map((product: ProductDataType) => (
-              <Product key={product.id} product={product} />
-            ))}
-          {!isPending &&
-            data &&
-            Array.isArray(data) &&
-            orderedProducts &&
-            orderedProducts.map((product: ProductDataType) => (
-              <Product key={product.id} product={product} />
-            ))}
-        </ContainerProducts>
-      )}
+      <Suspense fallback={<div>Loading...</div>}>
+        {noProductsInSearch && (
+          <ContainerNoProductsSearch>
+            <NoProductsTitle>Nenhum produto encontrado!</NoProductsTitle>
+            <LinkButton href={'/'}>Volte para a Home</LinkButton>
+          </ContainerNoProductsSearch>
+        )}
+        {!noProductsInSearch && (
+          <ContainerProducts>
+            {isPending && <SkeletonProducts />}
+            {!isPending &&
+              data &&
+              Array.isArray(data) &&
+              !orderedProducts &&
+              data.map((product: ProductDataType) => (
+                <Product key={product.id} product={product} />
+              ))}
+            {!isPending &&
+              data &&
+              Array.isArray(data) &&
+              orderedProducts &&
+              orderedProducts.map((product: ProductDataType) => (
+                <Product key={product.id} product={product} />
+              ))}
+          </ContainerProducts>
+        )}
+      </Suspense>
     </>
   );
 };

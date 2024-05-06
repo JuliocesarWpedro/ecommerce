@@ -58,7 +58,7 @@ const queryClient = new QueryClient();
 
 export default function Home() {
   return (
-    <Suspense fallback={<div>Loading</div>}>
+    <Suspense fallback={<div>Loading...</div>}>
       <MainContainer>
         <ContainerFilterAndPagination>
           <FilterList />

@@ -12,6 +12,16 @@ const NotFoundContainer = styled.div`
   align-items: center;
   text-align: center;
   padding: 20px 160px;
+
+  h1 {
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 40px;
+    line-height: 60px;
+    letter-spacing: 0em;
+    color: var(--text-dark-2);
+  }
   @media (max-width: 1050px) {
     padding: 20px 100px;
   }
@@ -27,16 +37,6 @@ const NotFoundContainer = styled.div`
   @media (max-width: 780px) {
     padding: 20px 50px;
   }
-`;
-
-const NotFoundTitle = styled.h1`
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  font-size: 40px;
-  line-height: 60px;
-  letter-spacing: 0em;
-  color: var(--text-dark-2);
 `;
 
 export const LinkButton = styled(Link)`
@@ -79,7 +79,7 @@ export const LinkButton = styled(Link)`
 const notFound = () => {
   return (
     <NotFoundContainer>
-      <NotFoundTitle>Página não encontrada!</NotFoundTitle>
+      <h1>Página não encontrada!</h1>
       <LinkButton href={'/'}>
         <p>Volte para a Home!</p>
         <ReturnIcon />

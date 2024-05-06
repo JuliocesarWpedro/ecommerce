@@ -5,7 +5,6 @@ import { ReactQueryClientProvider } from '@/components/ReactQueryClientProvider'
 import Footer from '@/components/Footer';
 import { ContextProductsProvider } from '@/components/ContextProductsProvider';
 import { Metadata } from 'next';
-import { Suspense } from 'react';
 
 const saira = Saira({
   weight: ['300', '400', '500', '600'],
@@ -27,18 +26,15 @@ export default function RootLayout({
 }) {
   return (
     <ReactQueryClientProvider>
-      <ContextProductsProvider>
-        <html lang="en">
-          <body
-            className={saira.className}
-            style={{ scrollBehavior: 'smooth' }}
-          >
+      <html lang="en">
+        <body className={saira.className} style={{ scrollBehavior: 'smooth' }}>
+          <ContextProductsProvider>
             <Header />
-            <Suspense fallback={<div>Loading</div>}>{children}</Suspense>
-            <Footer />
-          </body>
-        </html>
-      </ContextProductsProvider>
+            {children}
+          </ContextProductsProvider>
+          <Footer />
+        </body>
+      </html>
     </ReactQueryClientProvider>
   );
 }

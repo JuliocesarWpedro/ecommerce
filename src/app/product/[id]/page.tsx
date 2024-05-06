@@ -1,5 +1,5 @@
 'use client';
-import React, { Suspense } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
@@ -270,71 +270,66 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-      <Suspense fallback={<div>Loading</div>}>
-        {isLoading && <div>Loading...</div>}
-        {!isLoading && data && (
-          <ContainerProductPage>
-            <ContainerReturn onClick={handleNavigate}>
-              <p>Voltar</p> <ReturnIcon />
-            </ContainerReturn>
-            <ContainerProductInformations>
-              <Image
-                width={640}
-                height={580}
-                src={data.image}
-                alt="Product Image"
-              />
-              <ContainerDescription>
-                <ProductInfo>
-                  <div>
-                    <p>
-                      {data.category === 'womansClothing'
-                        ? 'Blusa feminina'
-                        : 'Blusa Masculina'}
-                    </p>
-                    <h2>{data.name}</h2>
-                  </div>
-                  <h3>{formattedValue(String(data.price))}</h3>
-                  <InstallmentPrice>
-                    <p>Parcelamos em até</p>
-                    <span>
-                      {data.parcelamento[0]}x de{' '}
-                      {formattedValue(
-                        String(data.parcelamento[1]).trim(),
-                      ).trim()}
-                    </span>
-                  </InstallmentPrice>
+      {isLoading && <div>Loading...</div>}
+      {!isLoading && data && (
+        <ContainerProductPage>
+          <ContainerReturn onClick={handleNavigate}>
+            <p>Voltar</p> <ReturnIcon />
+          </ContainerReturn>
+          <ContainerProductInformations>
+            <Image
+              width={640}
+              height={580}
+              src={data.image}
+              alt="Product Image"
+            />
+            <ContainerDescription>
+              <ProductInfo>
+                <div>
+                  <p>
+                    {data.category === 'womansClothing'
+                      ? 'Blusa feminina'
+                      : 'Blusa Masculina'}
+                  </p>
+                  <h2>{data.name}</h2>
+                </div>
+                <h3>{formattedValue(String(data.price))}</h3>
+                <InstallmentPrice>
+                  <p>Parcelamos em até</p>
                   <span>
-                    *Frete de R$40,00 para todo o Brasil. Grátis para compras
-                    acima de R$900,00.
+                    {data.parcelamento[0]}x de{' '}
+                    {formattedValue(String(data.parcelamento[1]).trim()).trim()}
                   </span>
-                  <div>
-                    <h5>Descrição</h5>
-                    <p>
-                      {data.name} disponível nos tamanhos{' '}
-                      {formatSizes(data.size)}
-                    </p>
-                  </div>
-                </ProductInfo>
+                </InstallmentPrice>
+                <span>
+                  *Frete de R$40,00 para todo o Brasil. Grátis para compras
+                  acima de R$900,00.
+                </span>
+                <div>
+                  <h5>Descrição</h5>
+                  <p>
+                    {data.name} disponível nos tamanhos {formatSizes(data.size)}
+                  </p>
+                </div>
+              </ProductInfo>
 
-                <SizeNumbers>
-                  {data.size.map((item, index) =>
-                    item
-                      .split(',')
-                      .map((size, subIndex) => (
-                        <p key={`${index}-${subIndex}`}>{size.trim()}</p>
-                      )),
-                  )}
-                </SizeNumbers>
+              <SizeNumbers>
+                {data.size.map((item, index) =>
+                  item
+                    .split(',')
+                    .map((size, subIndex) => (
+                      <p key={`${index}-${subIndex}`}>{size.trim()}</p>
+                    )),
+                )}
+              </SizeNumbers>
 
-                <button>
-                  <CartIcon /> Adicionar ao carrinho
-                </button>
-              </ContainerDescription>
-            </ContainerProductInformations>
-          </ContainerProductPage>
-        )}
-      </Suspense>
+              <button>
+                <CartIcon /> Adicionar ao carrinho
+              </button>
+            </ContainerDescription>
+          </ContainerProductInformations>
+        </ContainerProductPage>
+      )}
     </>
   );
 };

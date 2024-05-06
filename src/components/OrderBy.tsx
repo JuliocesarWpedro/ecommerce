@@ -63,7 +63,7 @@ const OrderBy = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const orderByTagRef = React.useRef<HTMLDivElement>(null);
   const spanRef = React.useRef<HTMLSpanElement>(null);
-  const { typesProducts, pageSearchQueryParam, totalItems } =
+  const { typesProducts, totalItems, pageSearchQueryParam } =
     useContextProducts();
 
   const handleClickOutsideLanguageDropdown = React.useCallback(
