@@ -1,10 +1,10 @@
-import Header from '@/components/Header';
 import './globals.css';
 import { Saira } from 'next/font/google';
 import { ReactQueryClientProvider } from '@/components/ReactQueryClientProvider';
-import Footer from '@/components/Footer';
-import { ContextProductsProvider } from '@/components/ContextProductsProvider';
 import { Metadata } from 'next';
+import { QueryClient } from '@tanstack/react-query';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const saira = Saira({
   weight: ['300', '400', '500', '600'],
@@ -19,6 +19,8 @@ export const metadata: Metadata = {
   description: 'E-commerce page',
 };
 
+const queryClient = new QueryClient();
+
 export default function RootLayout({
   children,
 }: {
@@ -28,10 +30,8 @@ export default function RootLayout({
     <ReactQueryClientProvider>
       <html lang="en">
         <body className={saira.className} style={{ scrollBehavior: 'smooth' }}>
-          <ContextProductsProvider>
-            <Header />
-            {children}
-          </ContextProductsProvider>
+          <Header />
+          {children}
           <Footer />
         </body>
       </html>

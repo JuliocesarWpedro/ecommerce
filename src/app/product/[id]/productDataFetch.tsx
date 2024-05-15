@@ -4,11 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import { ProductDataType } from '@/types/productsFetchResponse';
 
 interface ProductDataFetcherProps {
-  id: number;
+  idProduct: number;
 }
 
-const ProductDataFetch = ({ id }: ProductDataFetcherProps) => {
-  const fetchUrl = `https://api-storage-products.vercel.app/products/${id}`;
+const ProductDataFetch = ({ idProduct }: ProductDataFetcherProps) => {
+  const fetchUrl = `https://api-storage-products.vercel.app/products/${idProduct}`;
 
   const fetchProductData = async () => {
     const response = await fetch(fetchUrl);
@@ -16,7 +16,7 @@ const ProductDataFetch = ({ id }: ProductDataFetcherProps) => {
   };
 
   const { isLoading, data, error } = useQuery<ProductDataType>({
-    queryKey: ['product', id],
+    queryKey: ['product', idProduct],
     queryFn: fetchProductData,
     staleTime: 1000 * 60 * 60 * 24,
   });

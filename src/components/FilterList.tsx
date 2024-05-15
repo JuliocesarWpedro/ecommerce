@@ -1,86 +1,65 @@
-import { useContextProducts } from '@/hooks/useContextProducts';
-import { FilterType } from '@/types/filterTypes';
-import FilterItemProps from '@/types/productsCategorys';
+'use client';
 import React from 'react';
-import styled from 'styled-components';
+import {
+  FilterListTag,
+  FilterItem,
+} from './StyledContainers/FilterListStyledComponent';
+import { SearchParams } from '@/types/SearchParams';
 
-const FilterListTag = styled.ul`
-  display: flex;
-  gap: 40px;
-
-  @media (max-width: 420px) {
-    gap: 20px;
-  }
-`;
-
-const FilterItem = styled.li<FilterItemProps>`
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  font-size: 16px;
-  font-weight: ${(props) => (props.$selectedcategory ? '600' : '400')};
-  line-height: 22px;
-  text-transform: uppercase;
-  letter-spacing: 0em;
-  cursor: pointer;
-  text-align: center;
-  color: ${(props) =>
-    props.$selectedcategory
-      ? 'var(--text-dark-2: #41414D)'
-      : 'var(--text-dark)'};
-  border-bottom: ${(props) =>
-    props.$selectedcategory ? '4px solid var(--orange-low)' : 'none'};
-  @media (max-width: 420px) {
-    font-size: 14px;
-  }
-  &:hover {
-    font-weight: 600;
-    color: var(--text-dark-2);
-  }
-`;
-
-const FilterList = () => {
-  const { typesProducts, setOrderProducts } = useContextProducts();
+const FilterList = (params: SearchParams) => {
   return (
-    <FilterListTag>
-      <FilterItem
-        onClick={() => {
-          if (!(typesProducts === FilterType.allProducts)) {
-            setOrderProducts(null);
+    <>
+      <h1>verdade</h1>
+      {/* <FilterListTag>
+        <FilterItem
+          onClick={() => {
+            if (!(typesProducts === FilterType.allProducts)) {
+              setOrderProducts(null);
+            }
+            window.history.pushState(
+              {},
+              '',
+              `?typeProduct=allProducts&_page=1`,
+            );
+          }}
+          $selectedcategory={typesProducts === FilterType.allProducts ? 1 : 0}
+        >
+          Todos os Produtos
+        </FilterItem>
+        <FilterItem
+          onClick={() => {
+            if (!(typesProducts === FilterType.mensClothing)) {
+              setOrderProducts(null);
+            }
+            window.history.pushState(
+              {},
+              '',
+              `?typeProduct=mensClothing&_page=1`,
+            );
+          }}
+          $selectedcategory={typesProducts === FilterType.mensClothing ? 1 : 0}
+        >
+          Roupas Masculinas
+        </FilterItem>
+        <FilterItem
+          onClick={() => {
+            if (!(typesProducts === FilterType.womansClothing)) {
+              setOrderProducts(null);
+            }
+            window.history.pushState(
+              {},
+              '',
+              `?typeProduct=womansClothing&_page=1`,
+            );
+          }}
+          $selectedcategory={
+            typesProducts === FilterType.womansClothing ? 1 : 0
           }
-          window.history.pushState({}, '', `?typeProduct=allProducts&_page=1`);
-        }}
-        $selectedcategory={typesProducts === FilterType.allProducts ? 1 : 0}
-      >
-        Todos os Produtos
-      </FilterItem>
-      <FilterItem
-        onClick={() => {
-          if (!(typesProducts === FilterType.mensClothing)) {
-            setOrderProducts(null);
-          }
-          window.history.pushState({}, '', `?typeProduct=mensClothing&_page=1`);
-        }}
-        $selectedcategory={typesProducts === FilterType.mensClothing ? 1 : 0}
-      >
-        Roupas Masculinas
-      </FilterItem>
-      <FilterItem
-        onClick={() => {
-          if (!(typesProducts === FilterType.womansClothing)) {
-            setOrderProducts(null);
-          }
-          window.history.pushState(
-            {},
-            '',
-            `?typeProduct=womansClothing&_page=1`,
-          );
-        }}
-        $selectedcategory={typesProducts === FilterType.womansClothing ? 1 : 0}
-      >
-        Roupas femininas
-      </FilterItem>
-    </FilterListTag>
+        >
+          Roupas femininas
+        </FilterItem>
+      </FilterListTag> */}
+    </>
   );
 };
 

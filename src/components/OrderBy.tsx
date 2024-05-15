@@ -1,8 +1,8 @@
 import React from 'react';
 import { ArrowIcon } from './icons/ArrowIcon';
 import styled from 'styled-components';
-import OrderProducts, { FilterType } from '@/types/filterTypes';
-import { useContextProducts } from '@/hooks/useContextProducts';
+import OrderProducts from '@/types/filterTypes';
+import { SearchParams } from '@/types/SearchParams';
 
 const Container = styled.div`
   position: relative;
@@ -51,20 +51,18 @@ const OrderByOpenItem = styled.li`
   }
 `;
 
-const ORDERBYOPTIONS: OrderProducts = {
-  news: 'Novidades',
-  HigherLower: 'Preço: Maior - Menor',
-  LowerHigher: 'Preço: Menor - Maior',
-};
+// const ORDERBYOPTIONS: OrderProducts = {
+//   news: 'Novidades',
+//   HigherLower: 'Preço: Maior - Menor',
+//   LowerHigher: 'Preço: Menor - Maior',
+// };
 
-const OrderBy = () => {
+const OrderBy = (params: SearchParams) => {
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const dropDownModal = React.useRef<HTMLUListElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const orderByTagRef = React.useRef<HTMLDivElement>(null);
   const spanRef = React.useRef<HTMLSpanElement>(null);
-  const { typesProducts, totalItems, pageSearchQueryParam } =
-    useContextProducts();
 
   const handleClickOutsideLanguageDropdown = React.useCallback(
     (e: Event) => {
@@ -99,7 +97,9 @@ const OrderBy = () => {
   }, [handleClickOutsideLanguageDropdown]);
 
   return (
-    !(totalItems === 0) && (
+    <>
+      <h1>Verdade</h1>
+      {/* !(totalItems === 0) && (
       <Container ref={containerRef}>
         <OrderByTag
           ref={orderByTagRef}
@@ -141,7 +141,8 @@ const OrderBy = () => {
           </OrderByOpen>
         )}
       </Container>
-    )
+      ) */}
+    </>
   );
 };
 export default OrderBy;

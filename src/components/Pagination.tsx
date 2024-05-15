@@ -1,7 +1,9 @@
+'use client';
 import React from 'react';
 import styled from 'styled-components';
 import OrderBy from './OrderBy';
 import PaginationListComponent from './PaginationListComponent';
+import { SearchParams } from '@/types/SearchParams';
 
 const ContainerPagination = styled.div`
   display: flex;
@@ -28,11 +30,11 @@ const ContainerPagination = styled.div`
   }
 `;
 
-const Pagination = () => {
+const Pagination = (params: SearchParams) => {
   return (
     <ContainerPagination>
-      <OrderBy />
-      <PaginationListComponent />
+      <OrderBy searchParams={params.searchParams} />
+      <PaginationListComponent searchParams={params.searchParams} />
     </ContainerPagination>
   );
 };

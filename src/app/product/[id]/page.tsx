@@ -47,13 +47,8 @@ const ContainerProductInformations = styled.section`
     object-fit: cover;
   }
 
-  @media (max-width: 945px) {
-    flex-direction: column;
-    align-items: center;
-    img {
-      max-width: 100%;
-      width: 100%;
-    }
+  div {
+    padding: 24px 16px;
   }
 `;
 
@@ -186,7 +181,7 @@ const ProductInfo = styled.div`
       font-size: 14px;
       font-weight: 400;
       line-height: 21px;
-      color: #41414d;
+      color: var(--text-dark-2);
     }
   }
 
@@ -250,15 +245,15 @@ const formattedValue = (value: string) => {
   return noSpace;
 };
 
-const ProductPage = ({ params }: { params: { id: string } }) => {
-  const id = Number(params.id);
+const ProductsCartPage = ({ params }: { params: { id: string } }) => {
+  const idProduct = Number(params.id);
 
   const router = useRouter();
   const handleNavigate = () => {
     router.back();
   };
 
-  const { isLoading, data, error } = ProductDataFetch({ id });
+  const { isLoading, data, error } = ProductDataFetch({ idProduct });
 
   const formatSizes = (sizes: string[]) => {
     const formattedSizes =
@@ -268,9 +263,32 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
     return formattedSizes;
   };
 
+  const handleAddToCart = () => {
+    let cartItems = localStorage.getItem('cart-items');
+    if (cartItems) {
+      let cartItemsArray = JSON.parse(cartItems);
+
+      let existingProductIndex = cartItemsArray.findIndex(
+        (item: { id: string }) => item.id === String(idProduct),
+      );
+
+      console.log(existingProductIndex);
+
+      if (existingProductIndex != -1) {
+        cartItemsArray[existingProductIndex].quantity += 1;
+      } else {
+        cartItemsArray.push({ ...data, quantity: 1, idProduct });
+      }
+
+      localStorage.setItem('cart-items', JSON.stringify(cartItemsArray));
+    } else {
+      const newCart = [{ ...data, quantity: 1, idProduct }];
+      localStorage.setItem('cart-items', JSON.stringify(newCart));
+    }
+  };
+
   return (
     <>
-      {isLoading && <div>Loading...</div>}
       {!isLoading && data && (
         <ContainerProductPage>
           <ContainerReturn onClick={handleNavigate}>
@@ -323,7 +341,7 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
                 )}
               </SizeNumbers>
 
-              <button>
+              <button onClick={handleAddToCart}>
                 <CartIcon /> Adicionar ao carrinho
               </button>
             </ContainerDescription>
@@ -334,4 +352,4 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default ProductPage;
+export default ProductsCartPage;

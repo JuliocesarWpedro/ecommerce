@@ -1,4 +1,3 @@
-import { useContextProducts } from '@/hooks/useContextProducts';
 import styled from 'styled-components';
 const LoadingProduct = styled.div`
   display: flex;
@@ -15,8 +14,7 @@ const LoadingProduct = styled.div`
 `;
 
 const SkeletonProducts = () => {
-  const { perPage } = useContextProducts();
-  const loadingProducts = Array.from({ length: perPage }, (_, index) => (
+  const loadingProducts = Array.from({ length: 12 }, (_, index) => (
     <LoadingProduct key={index} />
   ));
 
