@@ -21,7 +21,11 @@ const FilterList = () => {
               `?typeProduct=allProducts&_page=1`,
             );
           }}
-          $selectedcategory={typeProduct === 'allProducts' ? 1 : 0}
+          $selectedcategory={
+            typeProduct !== 'mensClothing' && typeProduct !== 'womansClothing'
+              ? 1
+              : 0
+          }
         >
           Todos os Produtos
         </FilterItem>
