@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 
@@ -84,10 +84,6 @@ export default function useQueryProducts() {
     return null;
   }, [search_query, typeProduct]);
 
-  useEffect(() => {
-    fetchQuantity();
-  }, [fetchQuantity]);
-
   const fetchData = useCallback(async () => {
     setLoading(true);
     const response = await fetch(url.href);
@@ -104,13 +100,15 @@ export default function useQueryProducts() {
     staleTime: 1000 * 60 * 60 * 24,
   });
 
-  console.log('quantityData:', quantityData);
-
-  const { data, isError, refetch } = useQuery({
+  const { data, isError, refetch, isLoading } = useQuery({
     queryKey: ['products', _page, perPage, queryProduct, _sort, typeProduct],
     queryFn: fetchData,
     staleTime: 1000 * 60 * 60 * 24,
   });
+
+  React.useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading]);
 
   return { loading, data, isError, refetch, quantityData, perPage };
 }
