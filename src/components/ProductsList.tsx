@@ -74,16 +74,16 @@ const ContainerNoProductsSearch = styled.div`
   height: calc(100vh - 100px - 38px - 60px);
 `;
 
-const ProductsList = (params: SearchParams) => {
-  const { data, isLoading, isError } = useQueryProducts(params);
+const ProductsList = () => {
+  const { data, loading, isError } = useQueryProducts();
 
   return (
     <>
       {isError && <div>Erro encontrado!</div>}
       {!isError && (
         <ContainerProducts>
-          {isLoading && <SkeletonProducts />}
-          {!isLoading &&
+          {loading && <SkeletonProducts />}
+          {!loading &&
             Array.isArray(data) &&
             data.map((product: ProductDataType) => (
               <Product key={product.id} product={product} />

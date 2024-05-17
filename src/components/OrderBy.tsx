@@ -57,7 +57,7 @@ const OrderByOpenItem = styled.li`
 //   LowerHigher: 'Preço: Menor - Maior',
 // };
 
-const OrderBy = (params: SearchParams) => {
+const OrderBy = () => {
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const dropDownModal = React.useRef<HTMLUListElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);

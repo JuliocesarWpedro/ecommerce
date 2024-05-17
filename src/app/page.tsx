@@ -16,17 +16,17 @@ import ProductsList from '@/components/ProductsList';
 import PaginationListComponent from '@/components/PaginationListComponent';
 import Pagination from '@/components/Pagination';
 
-export default async function Home(params: SearchParams) {
+export default async function Home() {
   return (
     <>
       <MainContainer>
         <ContainerFilterAndPagination>
-          <FilterList searchParams={params.searchParams} />
-          <Pagination searchParams={params.searchParams} />
+          <FilterList />
+          <Pagination />
         </ContainerFilterAndPagination>
-        <ProductsList searchParams={params.searchParams}></ProductsList>
+        <ProductsList></ProductsList>
         <ContainerPagination>
-          <PaginationListComponent searchParams={params.searchParams} />
+          <PaginationListComponent />
         </ContainerPagination>
       </MainContainer>
     </>

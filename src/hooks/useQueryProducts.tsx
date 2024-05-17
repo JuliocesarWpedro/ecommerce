@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { SearchParams } from '@/types/SearchParams';
 import { useSearchParams } from 'next/navigation';
 
-export default function useQueryProducts(params: SearchParams) {
+export default function useQueryProducts() {
   const searchParams = useSearchParams();
 
   const _page = searchParams.get('_page') || '1';
@@ -13,7 +12,7 @@ export default function useQueryProducts(params: SearchParams) {
   const perPage = 12;
   const queryProduct = search_query?.replace(/\s+(?=\S)/g, '%20');
   const baseUrl = 'https://api-storage-products.vercel.app/products';
-  const [quantity, setQuantity] = useState<null | number>(null);
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const url = useMemo(() => {
     let constructedUrl = new URL(`${baseUrl}?_page=${_page}&_limit=12`);
@@ -59,32 +58,30 @@ export default function useQueryProducts(params: SearchParams) {
         '%20',
       )}`;
     }
-    try {
-      const response = await fetch(urlQuantity);
 
-      if (!response.ok) {
-        throw new Error(`Erro ao buscar produtos: ${response.statusText}`);
-      }
-      const quantityData = await response.json();
-      if (!search_query) {
-        if (!typeProduct) {
-          setQuantity(Number(quantityData.allProducts));
-        }
-        if (typeProduct === 'allProducts') {
-          setQuantity(Number(quantityData.allProducts));
-        }
-        if (typeProduct === 'mensClothing') {
-          setQuantity(Number(quantityData.mensClothing));
-        }
-        if (typeProduct === 'womansClothing') {
-          setQuantity(Number(quantityData.womansClothing));
-        }
-      } else {
-        setQuantity(quantityData.length);
-      }
-    } catch (error) {
-      setQuantity(null);
+    const response = await fetch(urlQuantity);
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar produtos: ${response.statusText}`);
     }
+
+    const quantityData = await response.json();
+    if (!search_query) {
+      if (!typeProduct) {
+        return Number(quantityData.allProducts);
+      }
+      if (typeProduct === 'allProducts') {
+        return Number(quantityData.allProducts);
+      }
+      if (typeProduct === 'mensClothing') {
+        return Number(quantityData.mensClothing);
+      }
+      if (typeProduct === 'womansClothing') {
+        return Number(quantityData.womansClothing);
+      }
+    } else {
+      return quantityData.length;
+    }
+    return null;
   }, [search_query, typeProduct]);
 
   useEffect(() => {
@@ -92,19 +89,28 @@ export default function useQueryProducts(params: SearchParams) {
   }, [fetchQuantity]);
 
   const fetchData = useCallback(async () => {
+    setLoading(true);
     const response = await fetch(url.href);
     if (!response.ok) {
       throw new Error(`Erro ao buscar produtos: ${response.statusText}`);
     }
-
+    setLoading(false);
     return response.json();
   }, [url]);
 
-  const { isLoading, data, isError, refetch } = useQuery({
+  const { data: quantityData } = useQuery({
+    queryKey: ['quantity', search_query, typeProduct],
+    queryFn: fetchQuantity,
+    staleTime: 1000 * 60 * 60 * 24,
+  });
+
+  console.log('quantityData:', quantityData);
+
+  const { data, isError, refetch } = useQuery({
     queryKey: ['products', _page, perPage, queryProduct, _sort, typeProduct],
     queryFn: fetchData,
     staleTime: 1000 * 60 * 60 * 24,
   });
 
-  return { isLoading, data, isError, refetch, quantity, perPage };
+  return { loading, data, isError, refetch, quantityData, perPage };
 }

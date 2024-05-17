@@ -13,10 +13,16 @@ interface PaginationSelectProps {
 }
 
 type Updates = {
-  _page?: number;
-  search_query?: string | null;
-  _sort?: 'news' | 'HigherLower' | 'LowerHigher';
-  typeProduct?: 'allProducts' | 'mensClothing' | 'womansClothing';
+  _page?: number | undefined | null;
+  search_query?: string | undefined | null;
+  _sort?: string | 'news' | 'HigherLower' | 'LowerHigher' | null;
+  typeProduct?:
+    | string
+    | 'allProducts'
+    | 'mensClothing'
+    | 'womansClothing'
+    | undefined
+    | null;
 };
 
 const PaginationListContainer = styled.div`
@@ -55,22 +61,25 @@ const PaginationSelect = styled.li<PaginationSelectProps>`
   }
 `;
 
-const PaginationListComponent = (params: SearchParams) => {
-  const { data, quantity, perPage } = useQueryProducts(params);
+const PaginationListComponent = () => {
+  const { quantityData, perPage, loading } = useQueryProducts();
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const currentPage = !isNaN(Number(params.searchParams._page))
-    ? Number(params.searchParams._page)
-    : 1;
-  const searchQuery = params.searchParams.search_query;
-  const orderProducts = params.searchParams._sort;
-  const filterType = params.searchParams.typeProduct;
+  const _page = searchParams.get('_page');
+  const typeProduct = searchParams.get('typeProduct');
+  const _sort = searchParams.get('_sort');
+  const search_query = searchParams.get('search_query');
+
+  const currentPage = !isNaN(Number(_page)) ? Number(_page) : 1;
+  const searchQuery = search_query;
+  const orderProducts = _sort;
+  const filterType = typeProduct;
   const slidesPerView = 4;
   const totalPages =
-    quantity && perPage > 0 ? Math.ceil(quantity / perPage) : 0;
+    quantityData && perPage > 0 ? Math.ceil(quantityData / perPage) : 0;
 
   const updateSearchParams = (params: URLSearchParams, updates: Updates) => {
     Object.entries(updates).forEach(([key, value]) => {
@@ -92,9 +101,9 @@ const PaginationListComponent = (params: SearchParams) => {
       const params = new URLSearchParams(searchParams);
       const updates = {
         _page: pageNumber,
-        search_query: searchQuery ? searchQuery.replace(/\s+/g, '+') : null,
-        _sort: orderProducts,
-        typeProduct: filterType,
+        search_query: search_query ? search_query.replace(/\s+/g, '+') : null,
+        _sort,
+        typeProduct,
       };
       replace(updateSearchParams(params, updates));
       scrollToTop();
@@ -124,7 +133,9 @@ const PaginationListComponent = (params: SearchParams) => {
           <PaginationSelect
             $selectedPage={i === currentPage}
             $disabled={false}
-            onClick={() => handlePageClick(i)}
+            onClick={() => {
+              handlePageClick(i);
+            }}
           >
             {i}
           </PaginationSelect>
@@ -135,7 +146,7 @@ const PaginationListComponent = (params: SearchParams) => {
     return paginationSelects;
   };
 
-  return (
+  return !loading ? (
     <PaginationListContainer>
       <ul>
         {totalPages >= 2 && (
@@ -163,7 +174,7 @@ const PaginationListComponent = (params: SearchParams) => {
         </>
       )}
     </PaginationListContainer>
-  );
+  ) : null;
 };
 
 export default PaginationListComponent;

@@ -30,11 +30,11 @@ const ContainerPagination = styled.div`
   }
 `;
 
-const Pagination = (params: SearchParams) => {
+const Pagination = () => {
   return (
     <ContainerPagination>
-      <OrderBy searchParams={params.searchParams} />
-      <PaginationListComponent searchParams={params.searchParams} />
+      <OrderBy />
+      <PaginationListComponent />
     </ContainerPagination>
   );
 };
