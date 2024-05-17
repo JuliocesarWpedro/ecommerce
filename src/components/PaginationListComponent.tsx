@@ -57,6 +57,7 @@ const PaginationSelect = styled.li<PaginationSelectProps>`
 
 const PaginationListComponent = (params: SearchParams) => {
   const { data, quantity, perPage } = useQueryProducts(params);
+
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -134,11 +135,6 @@ const PaginationListComponent = (params: SearchParams) => {
     return paginationSelects;
   };
 
-  if (totalPages > 2) {
-    console.log('elemento existe');
-  } else {
-    console.log('achou o erro');
-  }
   return (
     <PaginationListContainer>
       <ul>

@@ -272,8 +272,6 @@ const ProductsCartPage = ({ params }: { params: { id: string } }) => {
         (item: { id: string }) => item.id === String(idProduct),
       );
 
-      console.log(existingProductIndex);
-
       if (existingProductIndex != -1) {
         cartItemsArray[existingProductIndex].quantity += 1;
       } else {
