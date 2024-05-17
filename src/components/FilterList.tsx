@@ -4,7 +4,6 @@ import {
   FilterListTag,
   FilterItem,
 } from './StyledContainers/FilterListStyledComponent';
-import { SearchParams } from '@/types/SearchParams';
 import { useSearchParams } from 'next/navigation';
 
 const FilterList = () => {

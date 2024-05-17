@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SearchIcon } from './icons/SearchIcon';
+import { useRouter } from 'next/navigation';
 
 const SearchContainer = styled.form`
   display: flex;
@@ -49,20 +50,19 @@ const TagInputSearch = styled.input`
 
 const SearchInput = () => {
   const [inputValue, setInputValue] = React.useState<string>('');
-  // const { setTypesProducts } = useContextProducts();
+  const { replace } = useRouter();
 
-  // function handleSubmit(value: string) {
-  //   setTypesProducts(FilterType.allProducts);
-  //   const adjustedValue = inputValue.replace(/\s+(?=\S)/g, '+');
-  //   window.history.pushState({}, '', `?search_query=${adjustedValue}`);
-  //   setInputValue('');
-  // }
+  function handleSubmit(value: string) {
+    const adjustedValue = inputValue.replace(/\s+(?=\S)/g, '+');
+    replace(`?search_query=${adjustedValue}`);
+    setInputValue('');
+  }
 
   return (
     <SearchContainer
       onSubmit={(e) => {
         e.preventDefault();
-        // handleSubmit(inputValue);
+        handleSubmit(inputValue);
       }}
     >
       <TagInputSearch
@@ -73,7 +73,7 @@ const SearchInput = () => {
       ></TagInputSearch>
       <SearchIcon
         onClick={() => {
-          // handleSubmit(inputValue);
+          handleSubmit(inputValue);
         }}
       />
     </SearchContainer>

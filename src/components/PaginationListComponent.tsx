@@ -105,6 +105,7 @@ const PaginationListComponent = () => {
         _sort,
         typeProduct,
       };
+      console.log(params);
       replace(updateSearchParams(params, updates));
       scrollToTop();
     }
