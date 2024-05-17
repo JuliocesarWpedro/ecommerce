@@ -8,20 +8,30 @@ import {
 import ProductsList from '@/components/ProductsList';
 import PaginationListComponent from '@/components/PaginationListComponent';
 import Pagination from '@/components/Pagination';
+import { Suspense } from 'react';
 
 export default async function Home() {
   return (
     <>
-      <MainContainer>
-        <ContainerFilterAndPagination>
-          <FilterList />
-          <Pagination />
-        </ContainerFilterAndPagination>
-        <ProductsList></ProductsList>
-        <ContainerPagination>
-          <PaginationListComponent />
-        </ContainerPagination>
-      </MainContainer>
+      {' '}
+      <Suspense fallback={<div>Loading</div>}>
+        <MainContainer>
+          <ContainerFilterAndPagination>
+            <Suspense fallback={<div>Loading</div>}>
+              <FilterList />
+            </Suspense>
+            <Pagination />
+          </ContainerFilterAndPagination>
+          <Suspense fallback={<div>Loading</div>}>
+            <ProductsList></ProductsList>
+          </Suspense>
+          <ContainerPagination>
+            <Suspense fallback={<div>Loading</div>}>
+              <PaginationListComponent />
+            </Suspense>
+          </ContainerPagination>
+        </MainContainer>
+      </Suspense>
     </>
   );
 }

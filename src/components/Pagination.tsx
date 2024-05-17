@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { Suspense } from 'react';
 import styled from 'styled-components';
 import OrderBy from './OrderBy';
 import PaginationListComponent from './PaginationListComponent';
@@ -33,7 +33,9 @@ const ContainerPagination = styled.div`
 const Pagination = () => {
   return (
     <ContainerPagination>
-      <OrderBy />
+      <Suspense fallback={<div>Loading</div>}>
+        <OrderBy />
+      </Suspense>
       <PaginationListComponent />
     </ContainerPagination>
   );
