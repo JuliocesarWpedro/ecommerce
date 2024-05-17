@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { SearchParams } from '@/types/SearchParams';
 import { useSearchParams } from 'next/navigation';
 
@@ -11,117 +12,99 @@ export default function useQueryProducts(params: SearchParams) {
   const search_query = searchParams.get('search_query');
   const perPage = 12;
   const queryProduct = search_query?.replace(/\s+(?=\S)/g, '%20');
-
+  const baseUrl = 'https://api-storage-products.vercel.app/products';
   const [quantity, setQuantity] = useState<null | number>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<any>(null);
-  const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    const fetchQuantity = async () => {
-      setIsLoading(true);
-      setIsError(false);
+  const url = useMemo(() => {
+    let constructedUrl = new URL(`${baseUrl}?_page=${_page}&_limit=12`);
 
-      let urlQuantity = 'https://api-storage-products.vercel.app/quantitys';
+    if (typeProduct && typeProduct !== 'allProducts') {
+      constructedUrl.searchParams.append('category', typeProduct);
+    }
 
-      if (search_query) {
-        urlQuantity = `https://api-storage-products.vercel.app/products?q=${search_query.replace(
-          /\s+(?=\S)/g,
-          '%20',
-        )}`;
+    if (_sort) {
+      let sortField = '';
+      let order = '';
+
+      if (_sort === 'news') {
+        sortField = 'id';
+        order = 'desc';
+      } else if (_sort === 'LowerHigher') {
+        sortField = 'price';
+        order = 'asc';
+      } else if (_sort === 'HigherLower') {
+        sortField = 'price';
+        order = 'desc';
       }
 
-      try {
-        const response = await fetch(urlQuantity);
-
-        if (!response.ok) {
-          throw new Error(
-            `Erro ao buscar quantidade de produtos: ${response.statusText}`,
-          );
-        }
-
-        const quantityData = await response.json();
-
-        if (!search_query) {
-          if (!typeProduct) {
-            setQuantity(Number(quantityData.allProducts));
-          } else if (typeProduct === 'allProducts') {
-            setQuantity(Number(quantityData.allProducts));
-          } else if (typeProduct === 'mensClothing') {
-            setQuantity(Number(quantityData.mensClothing));
-          } else if (typeProduct === 'womansClothing') {
-            setQuantity(Number(quantityData.womansClothing));
-          }
-        } else {
-          setQuantity(quantityData.length);
-        }
-      } catch (error) {
-        setQuantity(null);
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
+      if (sortField && order) {
+        constructedUrl.searchParams.append('_sort', sortField);
+        constructedUrl.searchParams.append('_order', order);
       }
-    };
+    }
 
-    fetchQuantity();
+    if (queryProduct) {
+      constructedUrl.searchParams.append('q', queryProduct);
+    }
+
+    return constructedUrl;
+  }, [_page, typeProduct, _sort, queryProduct]);
+
+  const fetchQuantity = useCallback(async () => {
+    let urlQuantity = 'https://api-storage-products.vercel.app/quantitys';
+
+    if (search_query) {
+      urlQuantity = `https://api-storage-products.vercel.app/products?q=${search_query.replace(
+        /\s+(?=\S)/g,
+        '%20',
+      )}`;
+    }
+    try {
+      const response = await fetch(urlQuantity);
+
+      if (!response.ok) {
+        throw new Error(`Erro ao buscar produtos: ${response.statusText}`);
+      }
+      const quantityData = await response.json();
+      if (!search_query) {
+        if (!typeProduct) {
+          setQuantity(Number(quantityData.allProducts));
+        }
+        if (typeProduct === 'allProducts') {
+          setQuantity(Number(quantityData.allProducts));
+        }
+        if (typeProduct === 'mensClothing') {
+          setQuantity(Number(quantityData.mensClothing));
+        }
+        if (typeProduct === 'womansClothing') {
+          setQuantity(Number(quantityData.womansClothing));
+        }
+      } else {
+        setQuantity(quantityData.length);
+      }
+    } catch (error) {
+      setQuantity(null);
+    }
   }, [search_query, typeProduct]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setIsError(false);
+    fetchQuantity();
+  }, [fetchQuantity]);
 
-      let url = 'https://api-storage-products.vercel.app/products';
-      let params = `?_page=${_page}&_limit=${perPage}`;
+  const fetchData = useCallback(async () => {
+    const response = await fetch(url.href);
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar produtos: ${response.statusText}`);
+    }
 
-      if (typeProduct && typeProduct !== 'allProducts') {
-        params += `&category=${typeProduct}`;
-      }
+    return response.json();
+  }, [url]);
 
-      if (_sort) {
-        let sortField = '';
-        let order = '';
+  const { isLoading, data, isError, refetch } = useQuery({
+    queryKey: ['products', _page, perPage, queryProduct, _sort, typeProduct],
+    queryFn: fetchData,
+    staleTime: 1000 * 60 * 60 * 24,
+  });
 
-        if (_sort === 'news') {
-          sortField = 'id';
-          order = 'desc';
-        } else if (_sort === 'LowerHigher') {
-          sortField = 'price';
-          order = 'asc';
-        } else if (_sort === 'HigherLower') {
-          sortField = 'price';
-          order = 'desc';
-        }
-
-        if (sortField && order) {
-          params += `&_sort=${sortField}&_order=${order}`;
-        }
-      }
-
-      if (queryProduct) {
-        params += `&q=${queryProduct}`;
-      }
-
-      url += params;
-
-      try {
-        const response = await fetch(url);
-
-        if (!response.ok) {
-          throw new Error(`Erro ao buscar produtos: ${response.statusText}`);
-        }
-
-        const responseData = await response.json();
-        setData(responseData);
-      } catch (error) {
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [_page, perPage, typeProduct, _sort, queryProduct]);
-
-  return { isLoading, data, isError, quantity, perPage };
+  return { isLoading, data, isError, refetch, quantity, perPage };
 }
