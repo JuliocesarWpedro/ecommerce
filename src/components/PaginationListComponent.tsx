@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowIcon } from './icons/ArrowIcon';
 import useQueryProducts from '@/hooks/useQueryProducts';
-import { SearchParams } from '@/types/SearchParams';
+
 interface PaginationSelectProps {
   $selectedPage: boolean;
   $disabled: boolean;

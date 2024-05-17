@@ -1,8 +1,7 @@
 import React from 'react';
 import { ArrowIcon } from './icons/ArrowIcon';
 import styled from 'styled-components';
-import OrderProducts from '@/types/filterTypes';
-import { SearchParams } from '@/types/SearchParams';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const Container = styled.div`
   position: relative;
@@ -51,11 +50,11 @@ const OrderByOpenItem = styled.li`
   }
 `;
 
-// const ORDERBYOPTIONS: OrderProducts = {
-//   news: 'Novidades',
-//   HigherLower: 'Preço: Maior - Menor',
-//   LowerHigher: 'Preço: Menor - Maior',
-// };
+const ORDERBYOPTIONS = {
+  news: 'Novidades',
+  HigherLower: 'Preço: Maior - Menor',
+  LowerHigher: 'Preço: Menor - Maior',
+};
 
 const OrderBy = () => {
   const [openModal, setOpenModal] = React.useState<boolean>(false);
@@ -63,6 +62,11 @@ const OrderBy = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const orderByTagRef = React.useRef<HTMLDivElement>(null);
   const spanRef = React.useRef<HTMLSpanElement>(null);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  const typeProduct = searchParams.get('typeProduct');
+  const search_query = searchParams.get('search_query');
 
   const handleClickOutsideLanguageDropdown = React.useCallback(
     (e: Event) => {
@@ -84,6 +88,32 @@ const OrderBy = () => {
     [openModal],
   );
 
+  const updateSearchParams = (
+    params: URLSearchParams,
+    updates: Record<string, string | null>,
+  ) => {
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+    });
+    return `${pathname}?${params.toString()}`;
+  };
+
+  const handleOrderProducts = (key: string) => {
+    const params = new URLSearchParams(searchParams);
+    const updates = {
+      _page: '1',
+      search_query: search_query ? search_query.replace(/\s+/g, '+') : null,
+      _sort: key,
+      typeProduct,
+    };
+    replace(updateSearchParams(params, updates));
+    setOpenModal(false);
+  };
+
   React.useEffect(() => {
     const handleClick = (e: Event) => {
       handleClickOutsideLanguageDropdown(e);
@@ -98,8 +128,6 @@ const OrderBy = () => {
 
   return (
     <>
-      <h1>Verdade</h1>
-      {/* !(totalItems === 0) && (
       <Container ref={containerRef}>
         <OrderByTag
           ref={orderByTagRef}
@@ -112,28 +140,7 @@ const OrderBy = () => {
             {Object.entries(ORDERBYOPTIONS).map(([key, value], index) => (
               <OrderByOpenItem
                 key={index}
-                onClick={() => {
-                  if (pageSearchQueryParam) {
-                    const searchValueAdjusted = pageSearchQueryParam.replace(
-                      /\s+(?=\S)/g,
-                      '+',
-                    );
-                    window.history.pushState(
-                      {},
-                      '',
-                      `?search_query=${searchValueAdjusted}&_sort=${key}&_page=1`,
-                    );
-                  } else {
-                    window.history.pushState(
-                      {},
-                      '',
-                      `?typeProduct=${FilterType[
-                        typesProducts
-                      ].toString()}&_sort=${key}&_page=1`,
-                    );
-                  }
-                  setOpenModal((valueModal) => !valueModal);
-                }}
+                onClick={() => handleOrderProducts(key)}
               >
                 {value}
               </OrderByOpenItem>
@@ -141,8 +148,8 @@ const OrderBy = () => {
           </OrderByOpen>
         )}
       </Container>
-      ) */}
     </>
   );
 };
+
 export default OrderBy;
