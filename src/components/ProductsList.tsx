@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Product from './Product';
 import useQueryProducts from '@/hooks/useQueryProducts';
 import Link from 'next/link';
-import { SearchParams } from '@/types/SearchParams';
 import { ProductDataType } from '@/types/productsFetchResponse';
 import SkeletonProducts from './SkeletonProducts';
 
@@ -17,21 +16,6 @@ const ContainerProducts = styled.div`
   justify-content: center;
   gap: 32px;
   padding-bottom: 74px;
-`;
-
-const NoProductsTitle = styled.p`
-  text-align: center;
-  font-weight: bold;
-  font-size: 40px;
-  line-height: 60px;
-  letter-spacing: 0em;
-  color: var(--text-dark);
-  @media (max-width: 580px) {
-    font-size: 30px;
-  }
-  @media (max-width: 440px) {
-    font-size: 20px;
-  }
 `;
 
 export const LinkButton = styled(Link)`
@@ -64,19 +48,8 @@ export const LinkButton = styled(Link)`
   }
 `;
 
-const ContainerNoProductsSearch = styled.div`
-  display: flex;
-  padding-top: 60px;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-  text-align: center;
-  height: calc(100vh - 100px - 38px - 60px);
-`;
-
 const ProductsList = () => {
   const { data, loading, isError } = useQueryProducts();
-
   return (
     <>
       {isError && <div>Erro encontrado!</div>}
