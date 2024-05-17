@@ -73,10 +73,7 @@ const PaginationListComponent = () => {
   const _sort = searchParams.get('_sort');
   const search_query = searchParams.get('search_query');
 
-  const currentPage = !isNaN(Number(_page)) ? Number(_page) : 1;
-  const searchQuery = search_query;
-  const orderProducts = _sort;
-  const filterType = typeProduct;
+  const currentPage = Number(_page) && _page !== null ? parseInt(_page, 10) : 1;
   const slidesPerView = 4;
   const totalPages =
     quantityData && perPage > 0 ? Math.ceil(quantityData / perPage) : 0;
