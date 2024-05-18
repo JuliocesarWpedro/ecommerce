@@ -28,15 +28,13 @@ export function CartContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const storedCart = localStorage.getItem('cart-items');
-
-  let jsonCart = [];
-  if (storedCart) {
-    jsonCart = JSON.parse(storedCart);
-  }
-
   const [cartItems, setCartItems] = React.useState<CartValue[]>(() => {
-    return storedCart ? jsonCart : [];
+    const storedCart = localStorage.getItem('cart-items');
+    if (storedCart) {
+      return JSON.parse(storedCart);
+    } else {
+      return [];
+    }
   });
 
   const [totalItens, setTotalItens] = React.useState<number>(
