@@ -14,7 +14,7 @@ const fetchProductData = async (id: number): Promise<ProductDataType> => {
 export async function generateProductMetadata({
   params,
 }: {
-  params: { id: string };
+  params: { id: number };
 }): Promise<Metadata> {
   const id = Number(params.id);
 

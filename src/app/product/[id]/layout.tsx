@@ -4,7 +4,7 @@ import { generateProductMetadata } from './productMetadata';
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: { id: number };
 }): Promise<Metadata> {
   return generateProductMetadata({ params });
 }
