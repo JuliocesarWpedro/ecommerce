@@ -1,50 +1,15 @@
-import React from 'react';
+'use client';
+import React, { ChangeEvent } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import ReturnIcon from '@/components/icons/ReturnIcon';
-import DeleteIcon from '@/components/icons/DeleteIcon';
+import { CartValue } from '@/types/cart';
+import DeleteIcon from './icons/DeleteIcon';
+import FormatPrice from '@/utilities/FormatPrice';
+import { CartContext, useCart } from '@/context/CartContext';
 
-const CartProductsContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 32px;
-`;
-
-const OrderSummary = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  padding: 16px 24px;
-  width: 30%;
-
-  h2 {
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 30px;
-    color: var(--text-dark-2);
-    text-transform: uppercase;
-    margin-bottom: 17px;
-  }
-
-  button {
-    background-color: #51b853;
-    margin-top: 40px;
-    padding: 10px 0;
-    border-radius: 4px 0px 0px 0px;
-    opacity: 0px;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    text-align: center;
-    color: #f5f5fa;
-    border: none;
-    outline: none;
-  }
-`;
-
-const ProductsContent = styled.div`
-  width: 65%;
-`;
+interface CartItemProps {
+  product: CartValue;
+}
 
 const ProductContainer = styled.div`
   border-radius: 8px;
@@ -54,23 +19,21 @@ const ProductContainer = styled.div`
     height: 211px;
     object-fit: cover;
   }
-`;
 
-const PriceContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
+  @media (max-width: 600px) {
+    flex-direction: column;
 
-  p {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 24px;
-    color: var(--text-dark-2);
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 `;
 
 const TextProduct = styled.div`
-  padding: 16px 24px 16px 31px;
+  padding: 11px 24px 11px 31px;
+  gap: 5px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -100,47 +63,12 @@ const TextProduct = styled.div`
   div:last-child {
     display: flex;
     justify-content: space-between;
-    align-items: end;
+    align-items: center;
 
     span {
       color: #09090a;
       font-size: 16px;
       font-weight: 600;
-      line-height: 24px;
-    }
-  }
-`;
-
-const TotalPrice = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 24px;
-  padding-top: 8px;
-  border-top: 1px solid #dce2e5;
-  p {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
-    color: var(--text-dark-2);
-  }
-`;
-const TotalCart = styled.div`
-  margin-bottom: 23px;
-  h2 {
-    font-size: 24px;
-    font-weight: 500;
-    line-height: 36px;
-    color: var(--text-dark-2);
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  p {
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 24px;
-    span {
-      font-size: 16px;
-      font-weight: 500;
       line-height: 24px;
     }
   }
@@ -156,65 +84,46 @@ const SelectQuantity = styled.select`
   font-size: 16px;
 `;
 
-const CartItem = () => {
+const CartItem = ({ product }: CartItemProps) => {
+  const { handleDeleteItem, handleUpdateQuantity } = useCart();
+
+  const handleChangeQuantity = (e: ChangeEvent<HTMLSelectElement>) => {
+    handleUpdateQuantity(product.id, Number(e.target.value));
+  };
+
   return (
-    <CartProductsContainer>
-      <ProductsContent>
-        <TotalCart>
-          <h2>Seu carrinho</h2>
-          <p>
-            Total (3 produtos) <span>R$161,00</span>
-          </p>
-        </TotalCart>
+    <ProductContainer key={product.id}>
+      <Image width="256" alt="Product Image" height="211" src={product.image} />
+      <TextProduct>
         <div>
-          <ProductContainer>
-            <Image
-              width="256"
-              alt="Product Image"
-              height="211"
-              src="/imagetext.webp"
-            />
-            <TextProduct>
-              <div>
-                <h2>Caneca de cerâmica rústica</h2>
-                <DeleteIcon />
-              </div>
-              <p>
-                Aqui vem um texto descritivo do produto, esta caixa de texto
-                servirá apenas de exemplo para que simule algum texto que venha
-                a ser inserido nesse campo, descrevendo tal produto.
-              </p>
-              <div>
-                <SelectQuantity>
-                  <option value={1}>1</option>
-                  <option value={2}>2</option>
-                  <option value={3}>3</option>
-                  <option value={4}>4</option>
-                  <option value={5}>5</option>
-                </SelectQuantity>
-                <span>R$ 40,00</span>
-              </div>
-            </TextProduct>
-          </ProductContainer>
+          <h2>{product.name}</h2>
+          <span
+            onClick={() => handleDeleteItem(product.id)}
+            style={{ cursor: 'pointer' }}
+          >
+            {<DeleteIcon />}
+          </span>
         </div>
-      </ProductsContent>
-      <OrderSummary>
-        <h2>Resumo do pedido</h2>
-        <PriceContainer>
-          <p>Subtotal de produtos</p>
-          <p>R$ 161,00</p>
-        </PriceContainer>
-        <PriceContainer>
-          <p>Entrega</p>
-          <p>R$ 40,00</p>
-        </PriceContainer>
-        <TotalPrice>
-          <p>Total</p>
-          <p>R$ 201,00</p>
-        </TotalPrice>
-        <button>Finalizar a compra</button>
-      </OrderSummary>
-    </CartProductsContainer>
+        <p>
+          Aqui vem um texto descritivo do produto, esta caixa de texto servirá
+          apenas de exemplo para que simule algum texto que venha a ser inserido
+          nesse campo, descrevendo tal produto.
+        </p>
+        <div>
+          <SelectQuantity
+            value={product.quantity}
+            onChange={handleChangeQuantity}
+          >
+            {[...Array(5)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </SelectQuantity>
+          <span>{FormatPrice(String(product.price * product.quantity))}</span>
+        </div>
+      </TextProduct>
+    </ProductContainer>
   );
 };
 

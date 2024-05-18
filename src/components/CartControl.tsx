@@ -1,11 +1,14 @@
 import React from 'react';
 import { CartIcon } from './icons/CartIcon';
 import styled from 'styled-components';
+import { useRouter } from 'next/navigation';
+import { useCart } from '@/context/CartContext';
 
 const Container = styled.div`
   position: relative;
   justify-content: center;
   display: flex;
+  cursor: pointer;
 `;
 
 const NumberCartProducts = styled.span`
@@ -27,10 +30,17 @@ const NumberCartProducts = styled.span`
 `;
 
 const CartControl = () => {
+  const router = useRouter();
+
+  const { totalItens } = useCart();
+  const handlePage = () => {
+    router.push('/cart');
+  };
+
   return (
-    <Container>
+    <Container onClick={handlePage}>
       <CartIcon />
-      <NumberCartProducts>1</NumberCartProducts>
+      {totalItens > 0 && <NumberCartProducts>{totalItens}</NumberCartProducts>}
     </Container>
   );
 };

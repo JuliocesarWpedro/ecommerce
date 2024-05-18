@@ -4,16 +4,7 @@ import styled from 'styled-components';
 import { ProductDataType } from '@/types/productsFetchResponse';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-
-const formattedValue = (value: string) => {
-  const formatted = parseFloat(value).toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    minimumFractionDigits: 2,
-  });
-
-  return formatted;
-};
+import FormatPrice from '@/utilities/FormatPrice';
 
 const ProductItem = styled.div`
   display: flex;
@@ -94,7 +85,7 @@ const Product = ({ product }: { product: ProductDataType }) => {
       <TextContainer>
         <TitleProduct>{product.name}</TitleProduct>
         <LineSeparator />
-        <PriceProduct>{formattedValue(String(product.price))}</PriceProduct>
+        <PriceProduct>{FormatPrice(String(product.price))}</PriceProduct>
       </TextContainer>
     </ProductItem>
   );
