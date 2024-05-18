@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import { QueryClient } from '@tanstack/react-query';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { CartContextProvider } from '@/context/CartContext';
 
 const saira = Saira({
   weight: ['300', '400', '500', '600'],
@@ -30,9 +31,11 @@ export default function RootLayout({
     <ReactQueryClientProvider>
       <html lang="en">
         <body className={saira.className} style={{ scrollBehavior: 'smooth' }}>
-          <Header />
-          {children}
-          <Footer />
+          <CartContextProvider>
+            <Header />
+            {children}
+            <Footer />
+          </CartContextProvider>
         </body>
       </html>
     </ReactQueryClientProvider>
