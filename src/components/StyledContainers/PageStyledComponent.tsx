@@ -24,8 +24,10 @@ export const MainContainer = styled.main`
 `;
 
 export const ContainerFilterAndPagination = styled.div`
-  margin-top: 34px;
   display: flex;
+  max-width: 1425px;
+  width: 100%;
+  margin: 34px auto 0;
   align-items: start;
   justify-content: space-between;
   width: 100%;
@@ -36,10 +38,13 @@ export const ContainerFilterAndPagination = styled.div`
   }
 `;
 
-export const ContainerPagination = styled.div`
+export const ContainerPaginationBottom = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  max-width: 1425px;
+  width: 100%;
+  margin: 0 auto;
   @media (max-width: 1120px) {
     justify-content: center;
     padding-bottom: 20px;

@@ -8,15 +8,17 @@ import ReturnIcon from '@/components/icons/ReturnIcon';
 import ProductDataFetch from './productDataFetch';
 import FormatPrice from '@/utilities/FormatPrice';
 import { useCart } from '@/context/CartContext';
-import { ProductDataType } from '@/types/productsFetchResponse';
 
 const ContainerProductPage = styled.div`
   display: flex;
   flex-direction: column;
   background-color: var(--bg-secondary);
   padding: 20px 160px;
+
+  min-height: 100vh;
+  height: max-content;
   margin: 0 auto;
-  justify-content: space-between;
+  gap: 80px;
   @media (max-width: 1050px) {
     padding: 20px 100px;
   }
@@ -34,10 +36,18 @@ const ContainerProductPage = styled.div`
   }
 `;
 
+const ContentContainer = styled.div`
+  margin: 0 auto;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+`;
+
 const ContainerProductInformations = styled.section`
   display: flex;
   gap: 32px;
-  justify-content: center;
 
   img {
     max-width: 640px;
@@ -49,6 +59,10 @@ const ContainerProductInformations = styled.section`
   @media (max-width: 1050px) {
     flex-direction: column;
     align-items: center;
+
+    img {
+      width: 100%;
+    }
   }
 `;
 
@@ -118,9 +132,10 @@ const ContainerDescription = styled.div`
     text-align: center;
     padding: 0;
     width: 100%;
-    max-width: 80%;
+    max-width: 100%;
 
     button {
+      margin-top: 20px;
       margin-bottom: 20px;
     }
   }
@@ -267,61 +282,64 @@ const ProductsCartPage = ({ params }: { params: { id: string } }) => {
     <>
       {!isLoading && data && (
         <ContainerProductPage>
-          <ContainerReturn onClick={handleNavigate}>
-            <p>Voltar</p> <ReturnIcon />
-          </ContainerReturn>
-          <ContainerProductInformations>
-            <Image
-              width={640}
-              height={580}
-              src={data.image}
-              alt="Product Image"
-            />
-            <ContainerDescription>
-              <ProductInfo>
-                <div>
-                  <p>
-                    {data.category === 'womansClothing'
-                      ? 'Blusa feminina'
-                      : 'Blusa Masculina'}
-                  </p>
-                  <h2>{data.name}</h2>
-                </div>
-                <h3>{FormatPrice(String(data.price))}</h3>
-                <InstallmentPrice>
-                  <p>Parcelamos em até</p>
+          <ContentContainer>
+            <ContainerReturn onClick={handleNavigate}>
+              <p>Voltar</p> <ReturnIcon />
+            </ContainerReturn>
+            <ContainerProductInformations>
+              <Image
+                width={640}
+                height={580}
+                src={data.image}
+                alt="Product Image"
+              />
+              <ContainerDescription>
+                <ProductInfo>
+                  <div>
+                    <p>
+                      {data.category === 'womansClothing'
+                        ? 'Blusa feminina'
+                        : 'Blusa Masculina'}
+                    </p>
+                    <h2>{data.name}</h2>
+                  </div>
+                  <h3>{FormatPrice(String(data.price))}</h3>
+                  <InstallmentPrice>
+                    <p>Parcelamos em até</p>
+                    <span>
+                      {data.parcelamento[0]}x de{' '}
+                      {FormatPrice(String(data.parcelamento[1]).trim()).trim()}
+                    </span>
+                  </InstallmentPrice>
                   <span>
-                    {data.parcelamento[0]}x de{' '}
-                    {FormatPrice(String(data.parcelamento[1]).trim()).trim()}
+                    *Frete de R$40,00 para todo o Brasil. Grátis para compras
+                    acima de R$500,00.
                   </span>
-                </InstallmentPrice>
-                <span>
-                  *Frete de R$40,00 para todo o Brasil. Grátis para compras
-                  acima de R$900,00.
-                </span>
-                <div>
-                  <h5>Descrição</h5>
-                  <p>
-                    {data.name} disponível nos tamanhos {formatSizes(data.size)}
-                  </p>
-                </div>
-              </ProductInfo>
+                  <div>
+                    <h5>Descrição</h5>
+                    <p>
+                      {data.name} disponível nos tamanhos{' '}
+                      {formatSizes(data.size)}
+                    </p>
+                  </div>
+                </ProductInfo>
 
-              <SizeNumbers>
-                {data.size.map((item, index) =>
-                  item
-                    .split(',')
-                    .map((size, subIndex) => (
-                      <p key={`${index}-${subIndex}`}>{size.trim()}</p>
-                    )),
-                )}
-              </SizeNumbers>
+                <SizeNumbers>
+                  {data.size.map((item, index) =>
+                    item
+                      .split(',')
+                      .map((size, subIndex) => (
+                        <p key={`${index}-${subIndex}`}>{size.trim()}</p>
+                      )),
+                  )}
+                </SizeNumbers>
 
-              <button onClick={handleAddProduct}>
-                <CartIcon /> Adicionar ao carrinho
-              </button>
-            </ContainerDescription>
-          </ContainerProductInformations>
+                <button onClick={handleAddProduct}>
+                  <CartIcon /> Adicionar ao carrinho
+                </button>
+              </ContainerDescription>
+            </ContainerProductInformations>
+          </ContentContainer>
         </ContainerProductPage>
       )}
     </>

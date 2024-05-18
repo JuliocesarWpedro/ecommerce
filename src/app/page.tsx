@@ -2,7 +2,7 @@ import FilterList from '@/components/FilterList';
 import {
   MainContainer,
   ContainerFilterAndPagination,
-  ContainerPagination,
+  ContainerPaginationBottom,
 } from '@/components/StyledContainers/PageStyledComponent';
 
 import ProductsList from '@/components/ProductsList';
@@ -24,11 +24,11 @@ export default async function Home() {
           <Suspense fallback={<div>Loading</div>}>
             <ProductsList></ProductsList>
           </Suspense>
-          <ContainerPagination>
+          <ContainerPaginationBottom>
             <Suspense fallback={<div>Loading</div>}>
               <PaginationListComponent />
             </Suspense>
-          </ContainerPagination>
+          </ContainerPaginationBottom>
         </MainContainer>
       </Suspense>
     </>

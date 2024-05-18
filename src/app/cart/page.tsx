@@ -31,6 +31,14 @@ const ContainerProductPage = styled.div`
   }
 `;
 
+const ContentContainer = styled.div`
+  display: flex;
+  max-width: 1425px;
+  width: 100%;
+  flex-direction: column;
+  margin: 0 auto;
+`;
+
 const ContainerReturn = styled.div`
   display: flex;
   align-items: center;
@@ -64,10 +72,12 @@ const ProductPage = () => {
   return (
     <>
       <ContainerProductPage>
-        <ContainerReturn onClick={handleNavigate}>
-          <p>Voltar</p> <ReturnIcon />
-        </ContainerReturn>
-        <CartItens />
+        <ContentContainer>
+          <ContainerReturn onClick={handleNavigate}>
+            <p>Voltar</p> <ReturnIcon />
+          </ContainerReturn>
+          <CartItens />
+        </ContentContainer>
       </ContainerProductPage>
     </>
   );

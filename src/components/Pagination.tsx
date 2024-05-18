@@ -3,7 +3,6 @@ import React, { Suspense } from 'react';
 import styled from 'styled-components';
 import OrderBy from './OrderBy';
 import PaginationListComponent from './PaginationListComponent';
-import { SearchParams } from '@/types/SearchParams';
 
 const ContainerPagination = styled.div`
   display: flex;

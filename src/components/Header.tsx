@@ -5,11 +5,21 @@ import { styled } from 'styled-components';
 import CartControl from './CartControl';
 
 const TagHeader = styled.header`
-  display: flex;
-  width: 100%;
-  background-color: #fff;
   padding: 20px 160px;
-  margin: 0 auto;
+  div:first-child {
+    max-width: 1425px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+
+    @media (max-width: 760px) {
+      flex-direction: column;
+    }
+  }
+
+  background-color: #fff;
   justify-content: space-between;
   align-items: center;
   @media (max-width: 1050px) {
@@ -62,13 +72,15 @@ const Container = styled.div`
 const Header = () => {
   return (
     <TagHeader>
-      <Logo href="/" className={sairaStencil.className}>
-        E-commerce
-      </Logo>
-      <Container>
-        <SearchInput />
-        <CartControl />
-      </Container>
+      <div>
+        <Logo href="/" className={sairaStencil.className}>
+          E-commerce
+        </Logo>
+        <Container>
+          <SearchInput />
+          <CartControl />
+        </Container>
+      </div>
     </TagHeader>
   );
 };

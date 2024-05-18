@@ -9,6 +9,8 @@ import SkeletonProducts from './SkeletonProducts';
 
 const ContainerProducts = styled.div`
   min-height: 100vh;
+  max-width: 1425px;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto;
