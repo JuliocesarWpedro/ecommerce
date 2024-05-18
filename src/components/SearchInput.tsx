@@ -54,7 +54,7 @@ const SearchInput = () => {
 
   function handleSubmit(value: string) {
     const adjustedValue = inputValue.replace(/\s+(?=\S)/g, '+');
-    replace(`?search_query=${adjustedValue}`);
+    replace(`/?search_query=${adjustedValue}`);
     setInputValue('');
   }
 
