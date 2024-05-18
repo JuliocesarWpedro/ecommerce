@@ -19,6 +19,21 @@ const ContainerProducts = styled.div`
   gap: 32px;
   padding-bottom: 74px;
 `;
+const NoProductsTitle = styled.h2`
+  font-size: 45px;
+  font-weight: bold;
+  color: var(--text-dark-2);
+`;
+
+const ContainerNoProductsSearch = styled.div`
+  display: flex;
+  padding-top: 60px;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  text-align: center;
+  height: calc(100vh - 100px - 38px - 60px);
+`;
 
 export const LinkButton = styled(Link)`
   user-select: none;
@@ -51,19 +66,28 @@ export const LinkButton = styled(Link)`
 `;
 
 const ProductsList = () => {
-  const { data, loading, isError } = useQueryProducts();
+  const { data, loading, isError, quantityData } = useQueryProducts();
   return (
     <>
       {isError && <div>Erro encontrado!</div>}
       {!isError && (
-        <ContainerProducts>
-          {loading && <SkeletonProducts />}
-          {!loading &&
-            Array.isArray(data) &&
-            data.map((product: ProductDataType) => (
-              <Product key={product.id} product={product} />
-            ))}
-        </ContainerProducts>
+        <>
+          {quantityData === 0 ? (
+            <ContainerNoProductsSearch>
+              <NoProductsTitle>Nenhum produto encontrado!</NoProductsTitle>
+              <LinkButton href={'/'}>Volte para a Home</LinkButton>
+            </ContainerNoProductsSearch>
+          ) : (
+            <ContainerProducts>
+              {loading && <SkeletonProducts />}
+              {!loading &&
+                Array.isArray(data) &&
+                data.map((product: ProductDataType) => (
+                  <Product key={product.id} product={product} />
+                ))}
+            </ContainerProducts>
+          )}
+        </>
       )}
     </>
   );

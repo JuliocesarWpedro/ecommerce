@@ -107,8 +107,6 @@ export default function useQueryProducts() {
     staleTime: 1000 * 60 * 60 * 24,
   });
 
-  console.log(url);
-
   React.useEffect(() => {
     setLoading(isLoading);
   }, [isLoading]);
