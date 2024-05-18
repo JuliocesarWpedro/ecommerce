@@ -120,7 +120,7 @@ const CartItem = ({ product }: CartItemProps) => {
               </option>
             ))}
           </SelectQuantity>
-          <span>{FormatPrice(String(product.price * product.quantity))}</span>
+          <span>{FormatPrice(String(product.price))}</span>
         </div>
       </TextProduct>
     </ProductContainer>
