@@ -32,7 +32,7 @@ const NumberCartProducts = styled.span`
 const CartControl = () => {
   const router = useRouter();
 
-  const { totalItens } = useCart();
+  const { totalItems } = useCart();
   const handlePage = () => {
     router.push('/cart');
   };
@@ -40,7 +40,7 @@ const CartControl = () => {
   return (
     <Container onClick={handlePage}>
       <CartIcon />
-      {totalItens > 0 && <NumberCartProducts>{totalItens}</NumberCartProducts>}
+      {totalItems > 0 && <NumberCartProducts>{totalItems}</NumberCartProducts>}
     </Container>
   );
 };

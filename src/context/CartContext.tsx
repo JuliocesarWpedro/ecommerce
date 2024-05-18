@@ -15,7 +15,7 @@ interface CartContextProps {
   totalPrice: (value: CartValue[]) => number;
   freightPrice: number;
   totalPriceWithfreight: string;
-  totalItens: number;
+  totalItems: number;
   handleAddToCart: (product: ProductDataType) => void;
 }
 
@@ -28,18 +28,25 @@ export function CartContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [cartItems, setCartItems] = React.useState<CartValue[]>(() => {
+  const [cartItems, setCartItems] = React.useState<CartValue[]>([]);
+  const [totalItems, setTotalItems] = React.useState<number>(
+    cartItems.length || 0,
+  );
+
+  React.useEffect(() => {
     const storedCart = localStorage.getItem('cart-items');
     if (storedCart) {
-      return JSON.parse(storedCart);
-    } else {
-      return [];
+      const parsedCart = JSON.parse(storedCart);
+      setCartItems(parsedCart);
+      setTotalItems(parsedCart.length);
     }
-  });
+  }, []);
 
-  const [totalItens, setTotalItens] = React.useState<number>(
-    cartItems.length | 0,
-  );
+  React.useEffect(() => {
+    setTotalItems(cartItems.length);
+  }, [cartItems]);
+
+  console.log('totalItems:', totalItems);
 
   const updateLocalStorage = (newValue: CartValue[]) => {
     setCartItems(newValue);
@@ -86,7 +93,7 @@ export function CartContextProvider({
   };
 
   React.useEffect(() => {
-    setTotalItens(cartItems.length);
+    setTotalItems(cartItems.length);
   }, [cartItems]);
 
   const totalPrice = (value: CartValue[]) => {
@@ -120,7 +127,7 @@ export function CartContextProvider({
         totalPrice,
         freightPrice,
         totalPriceWithfreight,
-        totalItens,
+        totalItems,
         handleAddToCart,
       }}
     >
