@@ -46,8 +46,6 @@ export function CartContextProvider({
     setTotalItems(cartItems.length);
   }, [cartItems]);
 
-  console.log('totalItems:', totalItems);
-
   const updateLocalStorage = (newValue: CartValue[]) => {
     setCartItems(newValue);
     localStorage.setItem('cart-items', JSON.stringify(newValue));
