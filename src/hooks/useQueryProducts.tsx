@@ -10,7 +10,7 @@ export default function useQueryProducts() {
   const _sort = searchParams.get('_sort');
   const search_query = searchParams.get('search_query');
   const perPage = 12;
-  const queryProduct = search_query?.replace(/\s+(?=\S)/g, '%20');
+  const queryProduct = search_query;
   const baseUrl = 'https://api-storage-products.vercel.app/products';
   const [loading, setLoading] = React.useState<boolean>(false);
 
@@ -106,6 +106,8 @@ export default function useQueryProducts() {
     queryFn: fetchData,
     staleTime: 1000 * 60 * 60 * 24,
   });
+
+  console.log(url);
 
   React.useEffect(() => {
     setLoading(isLoading);
