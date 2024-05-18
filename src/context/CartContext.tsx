@@ -103,16 +103,13 @@ export function CartContextProvider({
   if (totalPrice(cartItems) >= 500) {
     freightPrice = 0;
   }
-  const totalPriceWithfreight = FormatPrice(
-    String(totalPrice(cartItems) + freightPrice),
-  );
 
-  const context = {
-    cartItems,
-    handleUpdateQuantity,
-    handleDeleteItem,
-    totalPriceWithfreight,
-  };
+  const totalPriceWithfreight = FormatPrice(
+    (totalPrice(cartItems) > 0
+      ? totalPrice(cartItems) + freightPrice
+      : 0
+    ).toString(),
+  );
 
   return (
     <CartContext.Provider

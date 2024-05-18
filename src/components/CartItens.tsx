@@ -18,6 +18,7 @@ const CartProductsContainer = styled.div`
 
 const OrderSummary = styled.div`
   display: flex;
+  max-height: 500px;
   flex-direction: column;
   background-color: #fff;
   padding: 16px 24px;
