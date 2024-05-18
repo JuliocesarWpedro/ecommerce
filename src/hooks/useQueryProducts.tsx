@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-
+type QuantityData = number;
 export default function useQueryProducts() {
   const searchParams = useSearchParams();
 
@@ -94,11 +94,12 @@ export default function useQueryProducts() {
     return response.json();
   }, [url]);
 
-  const { data: quantityData } = useQuery({
-    queryKey: ['quantity', search_query, typeProduct],
-    queryFn: fetchQuantity,
-    staleTime: 1000 * 60 * 60 * 24,
-  });
+  const { data: quantityData }: { data?: QuantityData } =
+    useQuery<QuantityData>({
+      queryKey: ['quantity', search_query, typeProduct],
+      queryFn: fetchQuantity,
+      staleTime: 1000 * 60 * 60 * 24,
+    });
 
   const { data, isError, refetch, isLoading } = useQuery({
     queryKey: ['products', _page, perPage, queryProduct, _sort, typeProduct],
