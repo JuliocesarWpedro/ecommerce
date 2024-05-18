@@ -6,11 +6,9 @@ import styled from 'styled-components';
 import { CartIcon } from '@/components/icons/CartIcon';
 import ReturnIcon from '@/components/icons/ReturnIcon';
 import ProductDataFetch from './productDataFetch';
-interface ParamsProps {
-  params: {
-    id: string;
-  };
-}
+import FormatPrice from '@/utilities/FormatPrice';
+import { useCart } from '@/context/CartContext';
+import { ProductDataType } from '@/types/productsFetchResponse';
 
 const ContainerProductPage = styled.div`
   display: flex;
@@ -39,6 +37,7 @@ const ContainerProductPage = styled.div`
 const ContainerProductInformations = styled.section`
   display: flex;
   gap: 32px;
+  justify-content: center;
 
   img {
     max-width: 640px;
@@ -47,8 +46,9 @@ const ContainerProductInformations = styled.section`
     object-fit: cover;
   }
 
-  div {
-    padding: 24px 16px;
+  @media (max-width: 1050px) {
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -77,7 +77,7 @@ const ContainerReturn = styled.div`
 `;
 
 const ContainerDescription = styled.div`
-  padding: 20px;
+  padding: 24px 16px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -112,7 +112,7 @@ const ContainerDescription = styled.div`
     }
   }
 
-  @media (max-width: 945px) {
+  @media (max-width: 1050px) {
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -235,25 +235,18 @@ const SizeNumbers = styled.div`
   }
 `;
 
-const formattedValue = (value: string) => {
-  const formatted = parseFloat(value).toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    minimumFractionDigits: 2,
-  });
-  const noSpace = formatted.replace(/\s/g, '');
-  return noSpace;
-};
-
 const ProductsCartPage = ({ params }: { params: { id: string } }) => {
   const idProduct = Number(params.id);
+  const { replace } = useRouter();
+
+  const { handleAddToCart } = useCart();
 
   const router = useRouter();
   const handleNavigate = () => {
     router.back();
   };
 
-  const { isLoading, data, error } = ProductDataFetch({ idProduct });
+  const { isLoading, data } = ProductDataFetch({ idProduct });
 
   const formatSizes = (sizes: string[]) => {
     const formattedSizes =
@@ -263,25 +256,10 @@ const ProductsCartPage = ({ params }: { params: { id: string } }) => {
     return formattedSizes;
   };
 
-  const handleAddToCart = () => {
-    let cartItems = localStorage.getItem('cart-items');
-    if (cartItems) {
-      let cartItemsArray = JSON.parse(cartItems);
-
-      let existingProductIndex = cartItemsArray.findIndex(
-        (item: { id: string }) => item.id === String(idProduct),
-      );
-
-      if (existingProductIndex != -1) {
-        cartItemsArray[existingProductIndex].quantity += 1;
-      } else {
-        cartItemsArray.push({ ...data, quantity: 1, idProduct });
-      }
-
-      localStorage.setItem('cart-items', JSON.stringify(cartItemsArray));
-    } else {
-      const newCart = [{ ...data, quantity: 1, idProduct }];
-      localStorage.setItem('cart-items', JSON.stringify(newCart));
+  const handleAddProduct = () => {
+    if (data) {
+      handleAddToCart(data);
+      replace('/cart');
     }
   };
 
@@ -309,12 +287,12 @@ const ProductsCartPage = ({ params }: { params: { id: string } }) => {
                   </p>
                   <h2>{data.name}</h2>
                 </div>
-                <h3>{formattedValue(String(data.price))}</h3>
+                <h3>{FormatPrice(String(data.price))}</h3>
                 <InstallmentPrice>
                   <p>Parcelamos em até</p>
                   <span>
                     {data.parcelamento[0]}x de{' '}
-                    {formattedValue(String(data.parcelamento[1]).trim()).trim()}
+                    {FormatPrice(String(data.parcelamento[1]).trim()).trim()}
                   </span>
                 </InstallmentPrice>
                 <span>
@@ -339,7 +317,7 @@ const ProductsCartPage = ({ params }: { params: { id: string } }) => {
                 )}
               </SizeNumbers>
 
-              <button onClick={handleAddToCart}>
+              <button onClick={handleAddProduct}>
                 <CartIcon /> Adicionar ao carrinho
               </button>
             </ContainerDescription>

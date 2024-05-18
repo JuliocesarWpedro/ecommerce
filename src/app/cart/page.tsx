@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 
 import ReturnIcon from '@/components/icons/ReturnIcon';
-import CartItem from '@/components/CartItem';
+import CartItens from '@/components/CartItens';
 
 const ContainerProductPage = styled.div`
   display: flex;
@@ -12,7 +12,8 @@ const ContainerProductPage = styled.div`
   background-color: var(--bg-secondary);
   padding: 20px 160px;
   margin: 0 auto;
-  height: 100vh;
+  min-height: 100vh;
+  height: max-content;
   @media (max-width: 1050px) {
     padding: 20px 100px;
   }
@@ -54,16 +55,6 @@ const ContainerReturn = styled.div`
   }
 `;
 
-const formattedValue = (value: string) => {
-  const formatted = parseFloat(value).toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    minimumFractionDigits: 2,
-  });
-  const noSpace = formatted.replace(/\s/g, '');
-  return noSpace;
-};
-
 const ProductPage = () => {
   const router = useRouter();
   const handleNavigate = () => {
@@ -76,7 +67,7 @@ const ProductPage = () => {
         <ContainerReturn onClick={handleNavigate}>
           <p>Voltar</p> <ReturnIcon />
         </ContainerReturn>
-        <CartItem />
+        <CartItens />
       </ContainerProductPage>
     </>
   );
